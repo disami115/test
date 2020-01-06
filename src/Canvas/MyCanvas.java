@@ -9,7 +9,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
  
  
-public class MyCanvas extends JComponent implements MouseWheelListener, MouseMotionListener, MouseListener {
+public class MyCanvas extends JComponent implements MouseWheelListener, MouseMotionListener, MouseListener  {
     private double zoom = 1.0;
     private Image img;
     public static final double SCALE_STEP = 0.1d;
@@ -19,7 +19,7 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     AffineTransform tx = new AffineTransform();
     private double scrollX = 0d;
     private double scrollY = 0d;
-    private Rectangle2D rect = new Rectangle2D.Double(0,0, 800, 600);
+    public boolean txt = false;
  
     public MyCanvas(double zoom, Image img) {
         this.zoom = zoom;
@@ -42,11 +42,7 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         g2d.clearRect(0, 0, getWidth(), getHeight());
         g2d.transform(tx);
         g2d.drawImage(this.img, 1, 1, this.img.getWidth(null), this.img.getHeight(null), null);
-        g2d.setColor(Color.DARK_GRAY);
-        //g2d.fill(rect);
-        g2d.setColor(Color.GRAY);
-        g2d.setStroke(new BasicStroke(5.0f));
-        //g2d.draw(rect);
+        if(txt) g2d.drawString("Hello", 100, 100);
         g2d.dispose();
     }
  
@@ -109,12 +105,7 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
             tx.setToIdentity();
             tx.scale(zoom, zoom);
         }
-//        What to do next?
-//        The only translation works when rect is smaller then canvas size.
-//        Rect bigger then canvas must be scrollable, but relative to mouse position as before.
-        // But when the rect gets bigger than canvas, there is a terrible jump of a graphics.
-        //So there must be some combination of translation ans scroll to achieve a smooth scale.
-        //... brain explosion(((
+
     }
  
  
@@ -162,5 +153,6 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     public void mouseExited(MouseEvent e) {
  
     }
- 
+
+
 }

@@ -23,10 +23,12 @@ public class SecondGUI extends JFrame{
 	private JButton Button3 = new JButton("Three");
 	private JButton TextButton = new JButton("Text");
 	private JButton BlurButton = new JButton("Blur");
+	public MyCanvas c;
+	public Graphics g;
 	
 	public SecondGUI(Image img) {
 		 super("ScreenSaver");
-		 MyCanvas c = new MyCanvas(1.0, img);
+		 c = new MyCanvas(1.0, img);
 		 CanvasPanel CanvPan = new CanvasPanel(true, c)/* */;
 			//Graphics g = new Graphics();
 			this.setBounds(200, 200, 800, 400);
@@ -88,7 +90,10 @@ public class SecondGUI extends JFrame{
 	
 	class TextButtonEventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			c.txt = true;
+			c.paintComponent(c.getGraphics());
 			System.out.println("Text");
+			
 		}
 	}
 	

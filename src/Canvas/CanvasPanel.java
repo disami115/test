@@ -10,7 +10,6 @@ public class CanvasPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private MyCanvas canvas;
  
     public CanvasPanel(boolean isDoubleBuffered, MyCanvas canvas) {
         super(isDoubleBuffered);
