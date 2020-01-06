@@ -3,11 +3,12 @@ package GUIs;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.geom.Rectangle2D;
+
 import javax.swing.*;
 import GUIs.GUI;
+import Canvas.CanvasPanel;
+import Canvas.MyCanvas;;
 
 public class SecondGUI extends JFrame{
 	
@@ -25,14 +26,17 @@ public class SecondGUI extends JFrame{
 	
 	public SecondGUI(Image img) {
 		 super("ScreenSaver");
-		 Canvas c = new Canvas() {
-				@Override
-	            public void paint(Graphics g){
-					g.drawImage(img, 1, 1, this.getWidth()-1, this.getHeight()-1, null);
-	            }
-			};
-		    this.setBounds(200, 200, 800, 400);
+		 MyCanvas c = new MyCanvas(1.0, img);
+		 CanvasPanel CanvPan = new CanvasPanel(true, c)/* */;
+			//Graphics g = new Graphics();
+			this.setBounds(200, 200, 800, 400);
 		    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		    this.setLayout(new BorderLayout());
+		    this.add(CanvPan, BorderLayout.CENTER);
+		    this.setSize(new Dimension(1000, 800));
+		    this.setVisible(true);
+		    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		    
 		    /*Container container = this.getContentPane();
 		    container.setLayout(new CardLayout());
 		    container.setBounds(0, 0, 100, 100);*/
@@ -53,7 +57,7 @@ public class SecondGUI extends JFrame{
 		    BP.add(BlurButton);
 		    BP.add(SaveButton);
 	        setJMenuBar(BP);
-		    this.add(c);
+		    //this.add(c);
 		    
 	}
 	
