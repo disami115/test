@@ -44,7 +44,6 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);	
-        //Graphics2D g2 = (Graphics2D) g;
         Graphics2D g2d = (Graphics2D) g.create();
         Graphics2D g2s = bufferedImage.createGraphics();
         g2d.clearRect(0, 0, getWidth(), getHeight());
@@ -58,21 +57,11 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     }
  
     public BufferedImage getBufferedImage(Graphics g) {
-    	super.paintComponent(g);	
-        //Graphics2D g2 = (Graphics2D) g;
-        Graphics2D g2d = (Graphics2D) g.create();
-        Graphics2D g2s = bufferedImage.createGraphics();
-        g2d.clearRect(0, 0, getWidth(), getHeight());
-        g2d.transform(tx);
-        g2s.drawImage(this.img, 1, 1, this.img.getWidth(null), this.img.getHeight(null), null);
-        if(txt) g2s.drawString("Hello", 100, 100);
-        zoom = 1;
-        g2s.transform(tx);
-        g2s.dispose();
-        g2d.drawImage(bufferedImage, 1, 1, this.img.getWidth(null), this.img.getHeight(null), null);
-        g2d.dispose();
+    	zoom = 1;
+    	paintComponent(g);
         return bufferedImage;
     }
+    
     @Override
     public void setSize(Dimension size) {
         super.setSize(size);
