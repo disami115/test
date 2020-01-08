@@ -6,13 +6,17 @@ import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
  
  
 public class MyCanvas extends JComponent implements MouseWheelListener, MouseMotionListener, MouseListener  {
-    private double zoom = 1.0;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private double zoom = 1.0;
     private Image img;
-    public static final double SCALE_STEP = 0.1d;
+    public static final double SCALE_STEP = 0.05d;
     private Dimension initialSize;
     private Point origin;
     private double previousZoom = zoom;
@@ -20,32 +24,55 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     private double scrollX = 0d;
     private double scrollY = 0d;
     public boolean txt = false;
- 
+    public BufferedImage bufferedImage = null;
     public MyCanvas(double zoom, Image img) {
         this.zoom = zoom;
         this.img = img;
+        bufferedImage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
         addMouseWheelListener(this);
         addMouseMotionListener(this);
         addMouseListener(this);
         setAutoscrolls(true);
     }
  
+    
+    
     public Dimension getInitialSize() {
         return initialSize;
     }
  
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
+        super.paintComponent(g);	
+        //Graphics2D g2 = (Graphics2D) g;
         Graphics2D g2d = (Graphics2D) g.create();
+        Graphics2D g2s = bufferedImage.createGraphics();
         g2d.clearRect(0, 0, getWidth(), getHeight());
         g2d.transform(tx);
-        g2d.drawImage(this.img, 1, 1, this.img.getWidth(null), this.img.getHeight(null), null);
-        if(txt) g2d.drawString("Hello", 100, 100);
+        g2s.drawImage(this.img, 1, 1, this.img.getWidth(null), this.img.getHeight(null), null);
+        if(txt) g2s.drawString("Hello", 100, 100);
+        g2s.transform(tx);
+        g2s.dispose();
+        g2d.drawImage(bufferedImage, 1, 1, this.img.getWidth(null), this.img.getHeight(null), null);
         g2d.dispose();
     }
  
+    public BufferedImage getBufferedImage(Graphics g) {
+    	super.paintComponent(g);	
+        //Graphics2D g2 = (Graphics2D) g;
+        Graphics2D g2d = (Graphics2D) g.create();
+        Graphics2D g2s = bufferedImage.createGraphics();
+        g2d.clearRect(0, 0, getWidth(), getHeight());
+        g2d.transform(tx);
+        g2s.drawImage(this.img, 1, 1, this.img.getWidth(null), this.img.getHeight(null), null);
+        if(txt) g2s.drawString("Hello", 100, 100);
+        zoom = 1;
+        g2s.transform(tx);
+        g2s.dispose();
+        g2d.drawImage(bufferedImage, 1, 1, this.img.getWidth(null), this.img.getHeight(null), null);
+        g2d.dispose();
+        return bufferedImage;
+    }
     @Override
     public void setSize(Dimension size) {
         super.setSize(size);
@@ -64,9 +91,11 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
  
     public void mouseWheelMoved(MouseWheelEvent e) {
         double zoomFactor = - SCALE_STEP*e.getPreciseWheelRotation()*zoom;
+        System.out.println("zoomfac:" + zoom);
+        System.out.println("zoom:" + zoom);
         zoom = Math.abs(zoom + zoomFactor);
-        //Here we calculate new size of canvas relative to zoom.
-        Rectangle realView = getVisibleRect();
+        int tzoom = (int)(zoom*100);
+        zoom = tzoom / 100.0;
         Dimension d = new Dimension(
                 (int)(initialSize.width*zoom),
                 (int)(initialSize.height*zoom));
@@ -125,7 +154,6 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
             int deltaX = origin.x - e.getX();
             int deltaY = origin.y - e.getY();
             Rectangle view = getVisibleRect();
-            Dimension size = getSize();
             view.x += deltaX;
             view.y += deltaY;
             scrollRectToVisible(view);

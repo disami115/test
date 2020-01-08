@@ -2,11 +2,10 @@ package GUIs;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 import javax.swing.*;
-import GUIs.GUI;
+import Saves.SaveToFile;
 import Canvas.CanvasPanel;
 import Canvas.MyCanvas;;
 
@@ -92,6 +91,7 @@ public class SecondGUI extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			c.txt = true;
 			c.paintComponent(c.getGraphics());
+			
 			System.out.println("Text");
 			
 		}
@@ -104,7 +104,13 @@ public class SecondGUI extends JFrame{
 	}
 
 	class SaveButtonEventListener implements ActionListener {
+		
+		
 		public void actionPerformed(ActionEvent e) {
+
+			SaveToFile s = new SaveToFile();
+			
+			s.TrySave(c.getBufferedImage(c.getGraphics()));
 			System.out.println("It's Saved!");
 		}
 	}
