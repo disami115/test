@@ -15,14 +15,13 @@ import java.io.ObjectOutputStream;
 
 public class SaveToFile extends JFrame
 {
-    private  JButton  btnSaveFile   = null;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private  JButton  btnSaveFile   = null;
     private  JButton  btnOpenDir    = null;
-    private  JButton  btnFileFilter = null;
-    private static  Graphics img = null;
     private  JFileChooser fileChooser = null;
-
-    private final String[][] FILTERS = {{"docx", "Файлы Word (*.docx)"},
-                                        {"pdf" , "Adobe Reader(*.pdf)"}};
     public SaveToFile() {
         super("Пример SaveToFile");
         btnOpenDir = new JButton("Открыть директорию");
@@ -42,10 +41,8 @@ public class SaveToFile extends JFrame
     	btnOpenDir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 fileChooser.setDialogTitle("Выбор директории");
-                // Определение режима - только каталог
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 int result = fileChooser.showOpenDialog(SaveToFile.this);
-                // Если директория выбрана, покажем ее в сообщении
                 if (result == JFileChooser.APPROVE_OPTION )
                           JOptionPane.showMessageDialog(SaveToFile.this, fileChooser.getSelectedFile());
             }
@@ -62,8 +59,6 @@ public class SaveToFile extends JFrame
         
     public static void openDialog(Graphics g)
     {
-    	img = g;
-        // Локализация компонентов окна JFileChooser
         UIManager.put(
                  "FileChooser.saveButtonText", "Сохранить");
         UIManager.put(
@@ -92,16 +87,11 @@ public class SaveToFile extends JFrame
         FileNameExtensionFilter jpgfilter = new FileNameExtensionFilter("jpg", "jpg");
         fileChooser.addChoosableFileFilter(pngfilter);
         fileChooser.addChoosableFileFilter(jpgfilter);
-         
         if (fileChooser.showSaveDialog(SaveToFile.this) == JFileChooser.APPROVE_OPTION ) {
-        	
         	String type = fileChooser.getFileFilter().getDescription();
-        			//getChoosableFileFilters()[0].getDescription();
         	File file2 = new File(fileChooser.getSelectedFile() + "." + type);
-        	
         	try {  
                 System.out.println(fileChooser.getSelectedFile() + "." + type);
-                
                 ImageIO.write(bf, type, file2);
             }  
             catch (Exception e1) {
