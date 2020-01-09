@@ -2,6 +2,7 @@ package Saves;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.Graphics;
 import java.awt.event.*;
@@ -82,20 +83,26 @@ public class SaveToFile extends JFrame
     }
     
     public void TrySave(BufferedImage bf) {
+    	File file = new File("Untitled");
     	fileChooser.setDialogTitle("Сохранение файла");
-        // Определение режима - только файл
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        
-        int result = fileChooser.showSaveDialog(SaveToFile.this);
-        // Если файл выбран, то представим его в сообщении
-        
+        fileChooser.setSelectedFile(file);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter pngfilter = new FileNameExtensionFilter("png", "png");
+        FileNameExtensionFilter jpgfilter = new FileNameExtensionFilter("jpg", "jpg");
+        fileChooser.addChoosableFileFilter(pngfilter);
+        fileChooser.addChoosableFileFilter(jpgfilter);
          
-        if (result == JFileChooser.APPROVE_OPTION ) {
-        	File file = null;
-        	file = fileChooser.getSelectedFile();
+        if (fileChooser.showSaveDialog(SaveToFile.this) == JFileChooser.APPROVE_OPTION ) {
+        	
+        	String type = fileChooser.getFileFilter().getDescription();
+        			//getChoosableFileFilters()[0].getDescription();
+        	File file2 = new File(fileChooser.getSelectedFile() + "." + type);
+        	
         	try {  
-                System.out.println(file.getAbsolutePath());
-                ImageIO.write(bf, "jpg", file);
+                System.out.println(fileChooser.getSelectedFile() + "." + type);
+                
+                ImageIO.write(bf, type, file2);
             }  
             catch (Exception e1) {
                 System.out.println("Что-то пошло не так...");
