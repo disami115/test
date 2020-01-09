@@ -30,6 +30,9 @@ public class SecondGUI extends JFrame{
 		 c = new MyCanvas(1.0, img);
 		 CanvasPanel CanvPan = new CanvasPanel(true, c)/* */;
 			//Graphics g = new Graphics();
+		
+		 
+		 
 			this.setBounds(200, 200, 800, 400);
 		    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		    this.setLayout(new BorderLayout());

@@ -26,10 +26,8 @@ public class SaveToFile extends JFrame
         super("Пример SaveToFile");
         btnOpenDir = new JButton("Открыть директорию");
         btnSaveFile = new JButton("Сохранить файл");
-
         fileChooser = new JFileChooser();
         addFileChooserListeners();
-
         JPanel contents = new JPanel();
         contents.add(btnOpenDir   );
         contents.add(btnSaveFile  );

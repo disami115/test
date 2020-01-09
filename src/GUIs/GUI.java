@@ -28,7 +28,7 @@ public class GUI extends JFrame {
 	    container.add(button);
 	}
 	
-	class ButtonEventListener implements ActionListener {
+	class ButtonEventListener extends JWindow implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				doUnvisible();
@@ -36,12 +36,13 @@ public class GUI extends JFrame {
 				e1.printStackTrace();
 			}
 			Image img = Screen.grabScreen();
-			SecondGUI w = new SecondGUI(img);
-			w.setVisible(true);
+			SelectCoordGui g2 = new SelectCoordGui(img);
+			g2.setVisible(true);
 			
 			System.out.println("it's work!");	
 		}
 	}
+	
 
 	private void doUnvisible() throws InterruptedException
 	{
