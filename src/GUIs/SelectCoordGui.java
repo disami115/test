@@ -25,6 +25,7 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
 	private static int x2 = 0;
 	private static int y2 = 0;
 	private Point origin;
+	private boolean isMove = false;
 	
 	public SelectCoordGui(Image img) {
 		addMouseListener(this);
@@ -51,9 +52,7 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
 	public void mousePressed(MouseEvent e) {
 		x1 = e.getX();
 		y1 = e.getY();
-		//System.out.println(origin.x + " " + origin.y);
-		System.out.println(x1 + " " + y1);
-		Screen.setFirstXY(x1, y1);
+		
     }
 	
 
@@ -61,13 +60,17 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
 	public void mouseReleased(MouseEvent e) {
 		x2 = e.getX();
         y2 = e.getY();
-        System.out.println(x2 + "and" + y2);
-        Screen.setSecondXY(x2, y2);
+        System.out.println(x1 + "and" + x2);
+        System.out.println(y1 + "and" + y2);
+        
+        Screen.setXYWH(x1,x2,y1,y2);
+       
         Image img = Screen.grabScreen();
         SecondGUI w = new SecondGUI(img);
 		w.setVisible(true);
 		this.setVisible(false);
 	}
+
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
@@ -89,7 +92,6 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 

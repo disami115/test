@@ -13,11 +13,14 @@ import java.awt.image.BufferedImage;
 import javax.swing.filechooser.FileSystemView;
 
 public class Screen {
-	private static int x1 = 0;
-	private static int y1 = 0;
+	private static int lx = 0;
+	private static int ly = 0;
 	private static Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-	private static int x2 = d.width;
-	private static int y2 = d.height;
+	private static int bx = d.width;
+	private static int by = d.height;
+	private static int w = d.width;
+	private static int h = d.height;
+	private static Rectangle r = new Rectangle(lx, ly, bx, by);
 
 	public static void SaveScreen(BufferedImage img)
 	{
@@ -37,7 +40,7 @@ public class Screen {
 	public static BufferedImage grabScreen() { 
 		BufferedImage image = null;
         try {
-        	image = new Robot().createScreenCapture(new Rectangle(x1, y1, x2-x1,y2-y1));
+        	image = new Robot().createScreenCapture(r);
             SaveScreen(image);
             return image;
         } catch (AWTException e) {
@@ -47,13 +50,23 @@ public class Screen {
 	}
 	
 	public static void setFirstXY(int x, int y){
-		x1 = x;
-		y1 = y;
+		//x1 = x;
+	//	y1 = y;
 	}
 	
 	public static void setSecondXY(int x, int y){
-		x2 = x;
-		y2 = y;
+		//x2 = x;
+		//y2 = y;
 	}
+	
+	public static void setXYWH(int x1, int x2, int y1, int y2){
+		bx = Math.max(x1, x2); // bigX
+		by = Math.max(y1, y2); // bigY
+		lx = Math.min(x1, x2); // littleX
+		ly = Math.min(y1, y2); // littleY
+		r = new Rectangle(lx, ly, bx-lx, by-ly);
+	}
+	
+	
 
 }
