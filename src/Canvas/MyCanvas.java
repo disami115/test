@@ -48,11 +48,11 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         Graphics2D g2s = bufferedImage.createGraphics();
         g2d.clearRect(0, 0, getWidth(), getHeight());
         g2d.transform(tx);
-        g2s.drawImage(this.img, 1, 1, this.img.getWidth(null), this.img.getHeight(null), null);
+        g2s.drawImage(this.img, 0, 0, this.img.getWidth(null), this.img.getHeight(null), null);
         if(txt) g2s.drawString("Hello", 100, 100);
         g2s.transform(tx);
         g2s.dispose();
-        g2d.drawImage(bufferedImage, 1, 1, this.img.getWidth(null), this.img.getHeight(null), null);
+        g2d.drawImage(bufferedImage, 0, 0, this.img.getWidth(null), this.img.getHeight(null), null);
         g2d.dispose();
     }
  
