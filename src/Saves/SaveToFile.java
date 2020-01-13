@@ -11,6 +11,7 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 public class SaveToFile extends JFrame
@@ -22,8 +23,8 @@ public class SaveToFile extends JFrame
 	private  JButton  btnSaveFile   = null;
     private  JButton  btnOpenDir    = null;
     private  JFileChooser fileChooser = null;
+	private BufferedImage bf;
     public SaveToFile() {
-        super("Пример SaveToFile");
         btnOpenDir = new JButton("Открыть директорию");
         btnSaveFile = new JButton("Сохранить файл");
         fileChooser = new JFileChooser();
@@ -96,5 +97,28 @@ public class SaveToFile extends JFrame
                 System.out.println("Что-то пошло не так...");
             }
         }
+    }
+    
+    public BufferedImage TryOpen() {
+    	File file = new File("Untitled");
+    	fileChooser.setDialogTitle("Открытие файла");
+    	
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setSelectedFile(file);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter pngfilter = new FileNameExtensionFilter("png", "png");
+        FileNameExtensionFilter jpgfilter = new FileNameExtensionFilter("jpg", "jpg");
+        fileChooser.addChoosableFileFilter(pngfilter);
+        fileChooser.addChoosableFileFilter(jpgfilter);
+        if (fileChooser.showOpenDialog(SaveToFile.this) == JFileChooser.APPROVE_OPTION ) {
+        try {
+        	bf = ImageIO.read(fileChooser.getSelectedFile());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return bf;
+        }
+        else return null;
     }
 }

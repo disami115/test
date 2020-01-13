@@ -10,19 +10,20 @@ import java.awt.Dimension;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import javax.swing.filechooser.FileSystemView;
+import Screens.XYWH;
 
 public class Screen {
 	private static int lx = 0;
 	private static int ly = 0;
-	private static Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+	public static Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 	private static int bx = d.width;
 	private static int by = d.height;
-	private static Rectangle r = new Rectangle(lx, ly, bx, by);
+	private static Rectangle r = new Rectangle(lx, ly, bx-lx, by-ly);
 
-	public static void SaveScreen(BufferedImage img)
+	public static void SaveScreen(BufferedImage img, String name)
 	{
 		try {	
-			ImageIO.write(img, "png", new File(getHomeDir(), "temp.png"));
+			ImageIO.write(img, "png", new File(getHomeDir(), name+".png"));
 		} catch (IOException e) {
 			System.out.println("IO exception"+e);
 		}
@@ -37,9 +38,8 @@ public class Screen {
 	public static BufferedImage grabScreen() { 
 		BufferedImage image = null;
         try {
-        	System.out.println(r.x + " " + r.y + " " + " " + r.width + " " + r.height);
         	image = new Robot().createScreenCapture(r);
-            SaveScreen(image);
+            //SaveScreen(image);
             return image;
         } catch (AWTException e) {
             e.printStackTrace();
@@ -49,12 +49,7 @@ public class Screen {
 	
 	
 	public static void setXYWH(int x1, int x2, int y1, int y2){
-		bx = Math.max(x1, x2) ; // bigX
-		by = Math.max(y1, y2) ; // bigY
-		lx = Math.min(x1, x2); // littleX
-		ly = Math.min(y1, y2); // littleY
-		System.out.println(lx + " " + ly + " " + " " + bx + " " + by);
-		r = new Rectangle(lx, ly, bx-lx, by-ly);
+		r = XYWH.setXYWH(x1, x2, y1, y2);
 	}
 	
 }

@@ -20,22 +20,24 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     private Dimension initialSize;
     private Point origin;
     private double previousZoom = zoom;
-    AffineTransform tx = new AffineTransform();
+    private AffineTransform tx = new AffineTransform();
     private double scrollX = 0d;
     private double scrollY = 0d;
     public boolean txt = false;
     public BufferedImage bufferedImage = null;
+    public static Graphics g;
     public MyCanvas(double zoom, Image img) {
         this.zoom = zoom;
         this.img = img;
-        bufferedImage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
+        repaint();
+        bufferedImage = new BufferedImage(this.img.getWidth(null), this.img.getHeight(null), BufferedImage.TYPE_INT_RGB);
         addMouseWheelListener(this);
         addMouseMotionListener(this);
         addMouseListener(this);
         setAutoscrolls(true);
+        
     }
  
-    
     
     public Dimension getInitialSize() {
         return initialSize;
@@ -43,16 +45,16 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
  
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);	
+        	
         Graphics2D g2d = (Graphics2D) g.create();
         Graphics2D g2s = bufferedImage.createGraphics();
         g2d.clearRect(0, 0, getWidth(), getHeight());
         g2d.transform(tx);
         g2s.drawImage(this.img, 0, 0, this.img.getWidth(null), this.img.getHeight(null), null);
-        if(txt) g2s.drawString("Hello", 100, 100);
         g2s.transform(tx);
         g2s.dispose();
-        g2d.drawImage(bufferedImage, 0, 0, this.img.getWidth(null), this.img.getHeight(null), null);
+        g2d.drawImage(bufferedImage, 0, 0, this.img.getWidth(null), this.img.getHeight(null), null);  
+        super.paintComponent(g2d);
         g2d.dispose();
     }
  
@@ -80,22 +82,16 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
  
     public void mouseWheelMoved(MouseWheelEvent e) {
         double zoomFactor = - SCALE_STEP*e.getPreciseWheelRotation()*zoom;
-        System.out.println("zoomfac:" + zoom);
-        System.out.println("zoom:" + zoom);
         zoom = Math.abs(zoom + zoomFactor);
         int tzoom = (int)(zoom*100);
         zoom = tzoom / 100.0;
         Dimension d = new Dimension(
                 (int)(initialSize.width*zoom),
                 (int)(initialSize.height*zoom));
-//        if (d.getWidth() >= realView.getWidth() && d.getHeight() >= realView.getHeight()) {
             setPreferredSize(d);
             setSize(d);
             validate();
             followMouseOrCenter(e);
-//        }
- 
-        //Here we calculate transform for the canvas graphics to scale relative to mouse
             translate(e);
             repaint();
         previousZoom = zoom;
@@ -113,13 +109,11 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         }
         Dimension d = getSize();
         if (d.getWidth() <= realView.getWidth() && d.getHeight() <= realView.getHeight()) {
-            //Zooming and translating relative to the mouse position
             tx.setToIdentity();
             tx.translate(p1.getX(), p1.getY());
             tx.scale(zoom, zoom);
             tx.translate(-p2.getX(), -p2.getY());
         } else {
-            //Only zooming, translate is not needed because scrollRectToVisible works;
             tx.setToIdentity();
             tx.scale(zoom, zoom);
         }
