@@ -1,6 +1,15 @@
 package Canvas;
 
 import javax.swing.*;
+
+import GUIs.SecondGUI;
+import MouseDraw.DrawObject;
+import MouseDraw.DrawObjectArrow;
+import MouseDraw.DrawObjectBlur;
+import MouseDraw.DrawObjectBrush;
+import MouseDraw.DrawObjectOne;
+import MouseDraw.DrawObjectTwo;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
@@ -24,12 +33,25 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     private double scrollX = 0d;
     private double scrollY = 0d;
     public boolean txt = false;
-    public BufferedImage bufferedImage = null;
+    public static BufferedImage bufferedImage = null;
     public static Graphics g;
+    protected SecondGUI SecG;
+    public MouseEvent e;
+    public Graphics2D g2s;
+    private boolean isMouseDragged = false;
+    private DrawObject drawObj;
+	public DrawObjects dOs;
+    
+    public enum DrawObjects{
+    	DrawObjectBrush,
+    	DrawObjectArrow,
+    	DrawObjectOne,
+    	DrawObjectTwo,
+    	DrawObjectBlur
+    }
     public MyCanvas(double zoom, Image img) {
         this.zoom = zoom;
         this.img = img;
-        repaint();
         bufferedImage = new BufferedImage(this.img.getWidth(null), this.img.getHeight(null), BufferedImage.TYPE_INT_RGB);
         addMouseWheelListener(this);
         addMouseMotionListener(this);
@@ -37,25 +59,67 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         setAutoscrolls(true);
         
     }
+    
+    public void changeDrawObjects(String s) {
+    	dOs = DrawObjects.valueOf(s);
+		
+    }
  
+    private void setDrawObject(DrawObjects dOs, Graphics2D g2s) {
+    	switch(dOs){
+    		case DrawObjectBrush: 
+    			this.drawObj = new DrawObjectBrush(g2s, this.e);
+    			System.out.println("set DrawObjectPoint");
+    			break;
+    		case DrawObjectArrow: 
+    			this.drawObj = new DrawObjectArrow(g2s, this.e);
+    			System.out.println("set DrawObjectPoint");
+    			break;
+    		case DrawObjectOne: 
+    			this.drawObj = new DrawObjectOne(g2s, this.e);
+    			System.out.println("set DrawObjectPoint");
+    			break;
+    		case DrawObjectTwo: 
+    			this.drawObj = new DrawObjectTwo(g2s, this.e);
+    			System.out.println("set DrawObjectPoint");
+    			break;	
+    		case DrawObjectBlur: 
+    			this.drawObj = new DrawObjectBlur(g2s, this.e);
+    			System.out.println("set DrawObjectPoint");
+    			break;	
+		default:
+			break;
+    	}
+    }
     
     public Dimension getInitialSize() {
         return initialSize;
     }
  
     @Override
-    public void paintComponent(Graphics g) {
-        	
-        Graphics2D g2d = (Graphics2D) g.create();
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2s = bufferedImage.createGraphics();
-        g2d.clearRect(0, 0, getWidth(), getHeight());
-        g2d.transform(tx);
-        g2s.drawImage(this.img, 0, 0, this.img.getWidth(null), this.img.getHeight(null), null);
-        g2s.transform(tx);
-        g2s.dispose();
-        g2d.drawImage(bufferedImage, 0, 0, this.img.getWidth(null), this.img.getHeight(null), null);  
-        super.paintComponent(g2d);
-        g2d.dispose();
+        //this.g2s = g2s;
+        g2s.drawImage(img, 0, 0, img.getWidth(null), img.getHeight(null), null);
+		if(isMouseDragged) {
+			setDrawObject(dOs,g2s);
+			if(drawObj != null) g2s = (Graphics2D) drawObj.Draws(Color.black);
+			System.out.println(e.getX() + " " + e.getY());
+		}
+		img = bufferedImage;
+        if (img != null) {
+            g.drawImage(img, 0, 0, this);
+        }
+        // if you need to draw changing non-static images, do it here
+        
+        
+    }
+    
+    
+
+    public void paintComp(Graphics g, MouseEvent e) {
+
     }
  
     public BufferedImage getBufferedImage(Graphics g) {
@@ -132,7 +196,19 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         scrollRectToVisible(visibleRect);
     }
  
+    
+    
     public void mouseDragged(MouseEvent e) {
+    	isMouseDragged = true;
+    	this.e = e;
+    	//Graphics g = getGraphics();
+    	//g.drawOval(e.getX(), e.getY(), 10, 10);
+    	//this.paintComponent(g);
+    	//DrawObject dObj = new DrawObjectPoint(g, e);
+    	//Graphics2D g = bufferedImage.createGraphics();
+    	this.paintComponent(this.getGraphics());
+    	//this.paint(g);
+    	this.paintComponent(this.getGraphics());
         if (origin != null) {
             int deltaX = origin.x - e.getX();
             int deltaY = origin.y - e.getY();
@@ -154,7 +230,7 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     }
  
     public void mouseReleased(MouseEvent e) {
- 
+        isMouseDragged = false;
     }
  
     public void mouseEntered(MouseEvent e) {

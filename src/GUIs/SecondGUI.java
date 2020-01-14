@@ -9,7 +9,8 @@ import javax.swing.*;
 import Saves.SaveToFile;
 import Screens.Screen;
 import Canvas.CanvasPanel;
-import Canvas.MyCanvas;;
+import Canvas.MyCanvas;
+import Canvas.MyCanvas.DrawObjects;
 
 public class SecondGUI extends JFrame{
 	
@@ -17,16 +18,17 @@ public class SecondGUI extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JButton ScreenButton = new JButton("Screen");
+	private JButton ScreenButton = new JButton("Скриншот");
 	private JButton SaveButton = new JButton("Save Screen");
-	private JButton ArrowButton = new JButton("Arrow");
-	private JButton Button1 = new JButton("One");
-	private JButton Button2 = new JButton("Two");
-	private JButton Button3 = new JButton("Three");
-	private JButton TextButton = new JButton("Text");
-	private JButton BlurButton = new JButton("Blur");
+	private JButton ArrowButton = new JButton("Стрелка");
+	private JButton BrushButton = new JButton("Кисть");
+	private JButton Button1 = new JButton("1");
+	private JButton Button2 = new JButton("2");
+	private JButton Button3 = new JButton("3");
+	private JButton TextButton = new JButton("Текст");
+	private JButton BlurButton = new JButton("Замазать");
 	private JButton OpenButton = new JButton("Open");
-	private CanvasPanel CanvPan;
+	public CanvasPanel CanvPan;
 	public SelectCoordGui g2 = null;
 	public MyCanvas c;
 	
@@ -35,6 +37,7 @@ public class SecondGUI extends JFrame{
 	public SecondGUI(Image img) {
 		super("ScreenSaver");
 		c = new MyCanvas(1.0, img);
+		//c = new MouseDrawListener(1.0, img, this);
 		CanvPan = new CanvasPanel(true, c);
 		this.remove(CanvPan);
 		this.add(CanvPan, BorderLayout.CENTER);
@@ -53,8 +56,10 @@ public class SecondGUI extends JFrame{
 		BlurButton.addActionListener(new BlurButtonEventListener());
 		SaveButton.addActionListener(new SaveButtonEventListener());
 		OpenButton.addActionListener(new OpenButtonEventListener());
+		BrushButton.addActionListener(new BrushButtonEventListener());
 		JMenuBar BP = new JMenuBar();
 		BP.add(ScreenButton);
+		BP.add(BrushButton);
 		BP.add(ArrowButton);
 		BP.add(Button1);
 		BP.add(Button2);
@@ -79,7 +84,6 @@ public class SecondGUI extends JFrame{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		System.out.print("sec gui");
 		Screen.setXYWH(0, Screen.d.width, 0, Screen.d.height);
 		g2.setDefault(Screen.grabScreen(), this);
 		g2.setVisible(true);
@@ -102,17 +106,20 @@ public class SecondGUI extends JFrame{
 	class ArrowButtonEventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Arrow");
+			c.changeDrawObjects(DrawObjects.DrawObjectArrow.toString());
 		}
 	}
 	
 	class Button1EventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("1");
+			c.changeDrawObjects(DrawObjects.DrawObjectOne.toString());
+			//System.out.println("1");
 		}
 	}
 
 	class Button2EventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			c.changeDrawObjects(DrawObjects.DrawObjectTwo.toString());
 			System.out.println("2");
 		}
 	}
@@ -127,6 +134,12 @@ public class SecondGUI extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			c.txt = true;
 			System.out.println("Text");
+		}
+	}
+	
+	class BrushButtonEventListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			c.changeDrawObjects(DrawObjects.DrawObjectBrush.toString());
 		}
 	}
 	
