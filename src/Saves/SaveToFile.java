@@ -7,12 +7,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.Graphics;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 public class SaveToFile extends JFrame
 {

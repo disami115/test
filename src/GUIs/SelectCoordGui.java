@@ -31,7 +31,6 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
 	private static boolean isPressed = false;
 	private static Image img = null;
 	private static Rectangle r;
-	private BufferedImage t;
 	private SecondGUI SecG;
 	private ImageDraw imgD;
 	
@@ -99,10 +98,7 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
 	    	Graphics2D g2d  = (Graphics2D)g; 
 	    	g2d.drawImage(img, 0, 0, this);
 	    	setXYWH(x1, this.x, y1, this.y);
-	    	AlphaComposite composite = AlphaComposite.SrcOver.derive( 0.3f );
-            g2d.setComposite( composite );
 	    	g2d.setColor(Color.black);
-	    	g2d.drawImage(t, 0, 0, this);
 	        g2d.drawRect(r.x , r.y , r.width, r.height);
 	        g2d.dispose();
 	    }

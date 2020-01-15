@@ -2,11 +2,7 @@ package GUIs;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.concurrent.TimeUnit;
-
 import javax.swing.*;
-import GUIs.SecondGUI;
-import Screens.Screen;
 
 public class GUI extends JFrame {
 	/**
@@ -27,6 +23,8 @@ public class GUI extends JFrame {
 	}
 	
 	class ButtonEventListener extends JWindow implements ActionListener {
+		private static final long serialVersionUID = 1L;
+
 		public void actionPerformed(ActionEvent e) {
 				
 		}

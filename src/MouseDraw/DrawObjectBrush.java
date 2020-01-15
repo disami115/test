@@ -11,15 +11,16 @@ public class DrawObjectBrush extends DrawObject {
 	}
 	
 	@Override
-	public Graphics Draws(Color c) {
-		MouseEvent e = this.e;
+	public Graphics Draws(int x1, int y1, int x2, int y2, Color c) {
 		Graphics g = this.g;
 		g.setColor(c);
-		g.fillOval(e.getX(), e.getY(), 10, 10);
+		//g.fillOval(r.x, r.y , 10, 10);
+		g.fillOval(x2, y2, 10, 10);
 		g.dispose();
 		return g;
 	}
-	
+
+
 	
 
 }

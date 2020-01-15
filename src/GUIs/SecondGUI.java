@@ -2,7 +2,6 @@ package GUIs;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
@@ -113,39 +112,37 @@ public class SecondGUI extends JFrame{
 	class Button1EventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			c.changeDrawObjects(DrawObjects.DrawObjectOne.toString());
-			//System.out.println("1");
 		}
 	}
 
 	class Button2EventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			c.changeDrawObjects(DrawObjects.DrawObjectTwo.toString());
-			System.out.println("2");
 		}
 	}
 	
 	class Button3EventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("3");
+			c.changeDrawObjects(DrawObjects.DrawObjectThree.toString());
 		}
 	}
 	
 	class TextButtonEventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			c.txt = true;
-			System.out.println("Text");
+			c.changeDrawObjects(DrawObjects.DrawObjectText.toString());
 		}
 	}
 	
 	class BrushButtonEventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			c.changeDrawObjects(DrawObjects.DrawObjectBrush.toString());
+			
 		}
 	}
 	
 	class BlurButtonEventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Blur");
+			c.changeDrawObjects(DrawObjects.DrawObjectBlur.toString());
 		}
 	}
 

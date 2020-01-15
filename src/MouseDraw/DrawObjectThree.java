@@ -5,9 +5,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 
-public class DrawObjectTwo extends DrawObject {
+public class DrawObjectThree extends DrawObject {
 
-	public DrawObjectTwo(Graphics g, MouseEvent e) {
+	public DrawObjectThree(Graphics g, MouseEvent e) {
 		super(g, e);
 		// TODO Auto-generated constructor stub
 	}
@@ -19,7 +19,7 @@ public class DrawObjectTwo extends DrawObject {
 		g.setColor(c);
 		g.drawOval(x2-9, y2-22, 30, 30);
 		g.setFont(f);
-		g.drawString("2", x2, y2);
+		g.drawString("3", x2, y2);
 		g.dispose();
 		return g;
 	}
