@@ -3,10 +3,7 @@ package MouseDraw;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Shape;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 public class DrawObjectArrow extends DrawObject {
 
@@ -14,7 +11,6 @@ public class DrawObjectArrow extends DrawObject {
 	
 	public DrawObjectArrow(Graphics g, MouseEvent e) {
 		super(g, e);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -43,15 +39,6 @@ public class DrawObjectArrow extends DrawObject {
 		this.y = (int) ((y + 3*y2)/4);
 	}
 	
-public Shape drawArrow(int x1, int y1) {
-	Shape s = null;
-	s.contains(new Rectangle2D.Double(x1,y1,10,40));
-	return s;
-	
-	
-}
-
-
 }
 
 

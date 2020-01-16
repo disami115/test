@@ -18,7 +18,7 @@ public class SecondGUI extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	private JButton ScreenButton = new JButton("Скриншот");
-	private JButton SaveButton = new JButton("Save Screen");
+	private JButton SaveButton = new JButton("Сохранить");
 	private JButton ArrowButton = new JButton("Стрелка");
 	private JButton BrushButton = new JButton("Кисть");
 	private JButton Button1 = new JButton("1");
@@ -26,6 +26,7 @@ public class SecondGUI extends JFrame{
 	private JButton Button3 = new JButton("3");
 	private JButton TextButton = new JButton("Текст");
 	private JButton BlurButton = new JButton("Замазать");
+	private JButton SaveServButton = new JButton("Сохранить на сервер");
 	private JButton OpenButton = new JButton("Open");
 	public CanvasPanel CanvPan;
 	public SelectCoordGui g2 = null;
@@ -56,6 +57,7 @@ public class SecondGUI extends JFrame{
 		SaveButton.addActionListener(new SaveButtonEventListener());
 		OpenButton.addActionListener(new OpenButtonEventListener());
 		BrushButton.addActionListener(new BrushButtonEventListener());
+		SaveServButton.addActionListener(new SaveServButtonEventListener());
 		JMenuBar BP = new JMenuBar();
 		BP.add(ScreenButton);
 		BP.add(BrushButton);
@@ -66,7 +68,7 @@ public class SecondGUI extends JFrame{
 		BP.add(TextButton);
 		BP.add(BlurButton);
 		BP.add(SaveButton);
-		BP.add(OpenButton);
+		BP.add(SaveServButton);
 	    setJMenuBar(BP);
 	}
 	
@@ -146,6 +148,13 @@ public class SecondGUI extends JFrame{
 		}
 	}
 
+	class SaveServButtonEventListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			SaveServGui ssgui = new SaveServGui(c);
+			ssgui.setVisible(true);
+		}
+	}
+	
 	class SaveButtonEventListener implements ActionListener {
 		
 		public void actionPerformed(ActionEvent e) {
@@ -161,17 +170,7 @@ public class SecondGUI extends JFrame{
 	
 		public void actionPerformed(ActionEvent e) {
 	
-			//SaveToFile s = new SaveToFile();
-			
-			
-			//c.remove(CanvPan);
-			
-			//BufferedImage i = s.TryOpen();
-			//Screen.SaveScreen(i, "open");
-			//g.drawImage((Image)i, i.getWidth(), i.getHeight(), null);
-			//g.dispose();
-			//c.paintComponent(g);
-			//c.paint(g);
+
 			
 		}
 }

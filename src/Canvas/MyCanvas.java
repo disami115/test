@@ -1,8 +1,6 @@
 package Canvas;
 
 import javax.swing.*;
-
-import Canvas.MyCanvas.DrawObjects;
 import GUIs.SecondGUI;
 import MouseDraw.DrawObject;
 import MouseDraw.DrawObjectArrow;
@@ -12,12 +10,9 @@ import MouseDraw.DrawObjectOne;
 import MouseDraw.DrawObjectText;
 import MouseDraw.DrawObjectThree;
 import MouseDraw.DrawObjectTwo;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.NoninvertibleTransformException;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
  
  
@@ -28,17 +23,16 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     private Image img;
     public static final double SCALE_STEP = 0.05d;
     private Dimension initialSize;
-    private Point origin;
-    private double previousZoom = zoom;
+   // private Point origin;
+   // private double previousZoom = zoom;
     private AffineTransform tx = new AffineTransform();
-    private double scrollX = 0d;
-    private double scrollY = 0d;
+   // private double scrollX = 0d;
+   // private double scrollY = 0d;
     public static BufferedImage bufferedImage = null;
     public static Graphics g;
     protected SecondGUI SecG;
     public MouseEvent e;
     public Graphics2D lastG;
-    private boolean isMouseDragged = false;
     private DrawObject drawObj;
 	public DrawObjects dOs;
 	private boolean isPressed = false;
@@ -169,8 +163,8 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         }
     }
  
-    public void mouseWheelMoved(MouseWheelEvent e) {
-       /* double zoomFactor = - SCALE_STEP*e.getPreciseWheelRotation()*zoom;
+    /*public void mouseWheelMoved(MouseWheelEvent e) {
+        double zoomFactor = - SCALE_STEP*e.getPreciseWheelRotation()*zoom;
         zoom = Math.abs(zoom + zoomFactor);
         int tzoom = (int)(zoom*100);
         zoom = tzoom / 100.0;
@@ -185,11 +179,11 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
             translate(e);
             repaint();
         previousZoom = zoom;
-        */
+        
     }
  
-    private void translate(MouseWheelEvent e) {
-        /*Rectangle realView = getVisibleRect();
+       private void translate(MouseWheelEvent e) {
+       Rectangle realView = getVisibleRect();
         Point2D p1 = e.getPoint();
         Point2D p2 = null;
         try {
@@ -208,25 +202,25 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
             tx.setToIdentity();
             tx.scale(zoom, zoom);
         }
-*/
+
     }
  
  
     public void followMouseOrCenter(MouseWheelEvent e) {
-       /* Point2D point = e.getPoint();
+        Point2D point = e.getPoint();
         Rectangle visibleRect = getVisibleRect();
  
         scrollX = point.getX()/previousZoom*zoom - (point.getX()-visibleRect.getX());
         scrollY = point.getY()/previousZoom*zoom - (point.getY()-visibleRect.getY());
  
         visibleRect.setRect(scrollX, scrollY, visibleRect.getWidth(), visibleRect.getHeight());
-        scrollRectToVisible(visibleRect);*/
-    }
+        scrollRectToVisible(visibleRect);
+    }*/
  
     
     
     public void mouseDragged(MouseEvent e) {
-    	isMouseDragged = true;
+   // 	isMouseDragged = true;
     	x2 = e.getX();
         y2 = e.getY();
         DrawObject.setNewRect(x1, y1, x2, y2);
@@ -257,12 +251,12 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     	isPressed = true;
 		x1 = e.getX();
 		y1 = e.getY();
-        origin = new Point(e.getPoint());
+       // origin = new Point(e.getPoint());
     }
  
     public void mouseReleased(MouseEvent e) {
         isPressed = false;
-        isMouseDragged = false;
+       // isMouseDragged = false;
         x2 = e.getX();
         y2 = e.getY();
         DrawObject.setNewRect(x1, y1, x2, y2);
@@ -280,6 +274,12 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     public void mouseExited(MouseEvent e) {
  
     }
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 }
