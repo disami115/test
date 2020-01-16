@@ -18,6 +18,8 @@ public class SaveServGui extends JFrame{
 	private String login, password;
 	private SaveServGui ssgui = this;
 
+	
+	
 	public SaveServGui(MyCanvas c) {
 		super("Сохранение на сервер");
 		this.c = c;
@@ -48,8 +50,8 @@ class SaveButtonEventListener implements ActionListener {
 		
 		public void actionPerformed(ActionEvent e) {
 			SaveToServ s = new SaveToServ();
-			setLogin("");
-			setPassword("");
+			setLogin("sahsa@mail.com");
+			setPassword("12345");
 			s.TrySave(c.getBufferedImage(c.getGraphics()), ssgui);
 			System.out.println("It's Saved!");
 		}
