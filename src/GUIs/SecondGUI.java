@@ -12,10 +12,6 @@ import Canvas.MyCanvas;
 import Canvas.MyCanvas.DrawObjects;
 
 public class SecondGUI extends JFrame{
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JButton ScreenButton = new JButton("Скриншот");
 	private JButton SaveButton = new JButton("Сохранить");
@@ -37,12 +33,11 @@ public class SecondGUI extends JFrame{
 	public SecondGUI(Image img) {
 		super("ScreenSaver");
 		c = new MyCanvas(1.0, img);
-		//c = new MouseDrawListener(1.0, img, this);
 		CanvPan = new CanvasPanel(true, c);
 		this.remove(CanvPan);
 		this.add(CanvPan, BorderLayout.CENTER);
 		if(g2 == null) g2 = new SelectCoordGui(img, this);
-		this.setBounds(Screen.d.width/6, Screen.d.height/6, 800, 600);
+		this.setBounds(Screen.d.width/2 - 400, Screen.d.height/2 - 300, 800, 600);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
 		this.setVisible(true);
@@ -73,7 +68,6 @@ public class SecondGUI extends JFrame{
 	}
 	
 	public void setNewImage(Image img) {
-		
 		c = new MyCanvas(1.0, img);
 		CanvPan = new CanvasPanel(true, c);
 		this.add(CanvPan, BorderLayout.CENTER);
@@ -158,9 +152,7 @@ public class SecondGUI extends JFrame{
 	class SaveButtonEventListener implements ActionListener {
 		
 		public void actionPerformed(ActionEvent e) {
-
 			SaveToFile s = new SaveToFile();
-			
 			s.TrySave(c.getBufferedImage(c.getGraphics()));
 			System.out.println("It's Saved!");
 		}
@@ -169,10 +161,7 @@ public class SecondGUI extends JFrame{
 	class OpenButtonEventListener implements ActionListener {
 	
 		public void actionPerformed(ActionEvent e) {
-	
-
-			
 		}
-}
+	}
 
 }

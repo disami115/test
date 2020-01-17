@@ -22,7 +22,7 @@ public class DrawObjectArrow extends DrawObject {
 		rotate(g, 10, x2, y2);
 		findPoint(x, y, x2, y2);
 		g.drawLine(x, y, x2, y2);
-		rotate(g,-20, x2, y2);
+		rotate(g,-21, x2, y2);
 		g.drawLine(x, y, x2, y2);
 		rotate(g, 10, x2, y2);
 		g.drawLine(x1, y1, x2, y2);

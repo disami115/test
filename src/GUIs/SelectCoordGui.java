@@ -30,16 +30,17 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
 	private static int y2 = 0;
 	private static boolean isPressed = false;
 	private static Image img = null;
+	private static BufferedImage bf = null;
 	private static Rectangle r;
 	private SecondGUI SecG;
 	private ImageDraw imgD;
 	
 	public SelectCoordGui(Image img, SecondGUI SecG) {
-		System.out.println("new scg");
 		setDefault(img, SecG);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	    this.setBounds(0, 0, d.width, d.height);
+	    
 	}
 	
 	public void setDefault(Image img,  SecondGUI SecG) {
@@ -55,30 +56,28 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
 		isPressed = false;
 		r = null;
 		SelectCoordGui.img = img;
-		System.out.println("set def");
 		this.SecG = SecG;
-	    imgD = new ImageDraw(SelectCoordGui.img, null);
+	    imgD = new ImageDraw(img, null);
 	    getContentPane().add(imgD);
+	    bf = Screen.grabScreen();
 	}
 
 	public static void setXYWH(int x1, int x2, int y1, int y2){
-		bx = Math.max(x1, x2); // bigX
-		by = Math.max(y1, y2); // bigY
-		lx = Math.min(x1, x2) - 1; // littleX
-		ly = Math.min(y1, y2) - 1 ; // littleY
-		r = new Rectangle(lx, ly, bx-lx, by-ly);
+		bx = Math.max(x1, x2) ; // bigX
+		by = Math.max(y1, y2) ; // bigY
+		lx = Math.min(x1, x2) ; // littleX
+		ly = Math.min(y1, y2) ; // littleY
+		r = new Rectangle(lx , ly, bx-lx, by-ly);
 	}
 	
 	class ImageDraw extends JComponent
 	{
 		private static final long serialVersionUID = 1L;
-		private Image capture;
-	    private int x = 0;
+		private int x = 0;
 	    private int y = 0;
 	    
 	    ImageDraw (Image capture, MouseEvent e) {
-	        this.capture = capture;
-		    if(isPressed) {
+	        if(isPressed) {
 		        this.x = e.getX();
 		        this.y = e.getY();
 	        }
@@ -86,7 +85,7 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
 	    
 	    public void paintComponent(Graphics g) {
 	    	Graphics2D g2d  = (Graphics2D)g; 
-	    	g2d.drawImage(capture, 0, 0, this);
+	    	g2d.drawImage(img, 0, 0, this);
 	        AlphaComposite composite = AlphaComposite.SrcOver.derive( 0.3f );
             g2d.setComposite( composite );
             g2d.fillRect(0, 0, d.width, d.height);
@@ -98,7 +97,7 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
 	    	Graphics2D g2d  = (Graphics2D)g; 
 	    	g2d.drawImage(img, 0, 0, this);
 	    	setXYWH(x1, this.x, y1, this.y);
-	    	g2d.setColor(Color.black);
+	    	g2d.setColor(Color.red);
 	        g2d.drawRect(r.x , r.y , r.width, r.height);
 	        g2d.dispose();
 	    }
@@ -115,10 +114,10 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		x2 = e.getX() + 1;
-        y2 = e.getY() + 1;
+		x2 = e.getX() ;
+        y2 = e.getY() ;
         Screen.setXYWH(x1,x2,y1,y2);
-        if(isPressed) img = Screen.grabScreen();
+        if(isPressed) img = bf.getSubimage(r.x, r.y, r.width+1, r.height+1);
         SecG.setNewImage(img);
 		SecG.setVisible(true);
 		this.setVisible(false);

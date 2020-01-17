@@ -18,7 +18,7 @@ public class Screen {
 	public static Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 	private static int bx = d.width;
 	private static int by = d.height;
-	private static Rectangle r = new Rectangle(lx, ly, bx-lx, by-ly);
+	public static Rectangle r = new Rectangle(lx, ly, bx-lx, by-ly);
 
 	public static void SaveScreen(BufferedImage img, String name)
 	{

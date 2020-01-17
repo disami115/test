@@ -13,6 +13,8 @@ import MouseDraw.DrawObjectTwo;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
  
  
@@ -23,11 +25,7 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     private Image img;
     public static final double SCALE_STEP = 0.05d;
     private Dimension initialSize;
-   // private Point origin;
-   // private double previousZoom = zoom;
     private AffineTransform tx = new AffineTransform();
-   // private double scrollX = 0d;
-   // private double scrollY = 0d;
     public static BufferedImage bufferedImage = null;
     public static Graphics g;
     protected SecondGUI SecG;
@@ -40,7 +38,12 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
 	private int y1 = 0;
 	private int x2 = 0;
 	private int y2 = 0;
+	private double scrollX = 0d;
+	private double scrollY = 0d;
 	private boolean isReleased = false;
+	private double previousZoom;
+	private int rx1;
+	private int ry1;
     
     public enum DrawObjects{
     	DrawObjectBrush,
@@ -92,7 +95,6 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     		case DrawObjectText: 
     			this.drawObj = new DrawObjectText(g2s, this.e);
     			break;	
-    			
 		default:
 			break;
     	}
@@ -102,18 +104,17 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         return initialSize;
     }
  
+    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        
         Graphics2D g2s = bufferedImage.createGraphics();
         Graphics2D g2d = (Graphics2D) g.create();
-        g2s.drawImage(img, 0, 0, img.getWidth(null), img.getHeight(null), null);
-        //g2s.transform(tx);
+        g2s.drawImage(img, 0, 0, null);
         g2d.transform(tx);
         if(drawObj != null){
 	        setDrawObject(dOs,g2s);
-	        System.out.println(dOs.name());
-			DrawObject.setNewRect(x1, y1, x2, y2);
 	        if(isPressed && dOs.name() == "DrawObjectBrush") {
 					g2s = (Graphics2D) drawObj.Draws(x1, y1, x2, y2, Color.red);
 			}
@@ -131,12 +132,13 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     	super.paintComponent(g);
         x2 = e.getX();
 		y2 = e.getY();
-
-		Graphics2D g2d  = (Graphics2D)g; 
-    	g2d.drawImage(img, 0, 0, this);
-    	DrawObject.setNewRect(x1, y1, x2, y2);
+		x1 = rx1;
+		y1 = ry1;
+		System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
+		Graphics2D g2d  = (Graphics2D)g;
+    	g2d.drawImage(img, 0, 0, (int)(img.getWidth(null)* zoom), (int)(img.getHeight(null)*zoom), this);
     	setDrawObject(dOs,g2d);
-        g2d = (Graphics2D) drawObj.Draws(x1, y1, x2, y2, Color.red);
+        g2d = (Graphics2D) drawObj.Draws((int)(x1 * zoom), (int)(y1 *zoom), x2, y2, Color.red);
         g2d.transform(tx);
         g2d.dispose();
     }
@@ -163,11 +165,11 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         }
     }
  
-    /*public void mouseWheelMoved(MouseWheelEvent e) {
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
         double zoomFactor = - SCALE_STEP*e.getPreciseWheelRotation()*zoom;
-        zoom = Math.abs(zoom + zoomFactor);
-        int tzoom = (int)(zoom*100);
-        zoom = tzoom / 100.0;
+        if(Math.abs(zoom + zoomFactor) > 1) zoom = Math.abs(zoom + zoomFactor);
+        else zoom = 1;
         System.out.println(zoom);
         Dimension d = new Dimension(
                 (int)(initialSize.width*zoom),
@@ -215,30 +217,23 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
  
         visibleRect.setRect(scrollX, scrollY, visibleRect.getWidth(), visibleRect.getHeight());
         scrollRectToVisible(visibleRect);
-    }*/
+    }
  
     
     
     public void mouseDragged(MouseEvent e) {
-   // 	isMouseDragged = true;
-    	x2 = e.getX();
-        y2 = e.getY();
+    	x2 = (int) (e.getX() / zoom);
+        y2 = (int) (e.getY() / zoom);
+        System.out.println("mD");
+        System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
         DrawObject.setNewRect(x1, y1, x2, y2);
         setDrawObject(dOs, (Graphics2D) this.getGraphics());
         if(isPressed && dOs.name() == "DrawObjectBrush") {
         	this.paintComponent(this.getGraphics());
         }
-        else this.repaint(this.getGraphics(), e);
-    	
-    	
-        /*if (origin != null) {
-            int deltaX = origin.x - e.getX();
-            int deltaY = origin.y - e.getY();
-            Rectangle view = getVisibleRect();
-            view.x += deltaX;
-            view.y += deltaY;
-            scrollRectToVisible(view);
-        }*/
+        else {
+    		this.repaint(this.getGraphics(), e);
+        }
     }
  
     public void mouseMoved(MouseEvent e) {
@@ -249,19 +244,21 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
  
     public void mousePressed(MouseEvent e) {
     	isPressed = true;
-		x1 = e.getX();
-		y1 = e.getY();
-       // origin = new Point(e.getPoint());
+    	
+		x1 = (int) (e.getX() / zoom);
+		y1 = (int) (e.getY() / zoom);
+		rx1 = x1;
+		ry1 = y1;
+		System.out.println(rx1 + " " + ry1);
     }
  
     public void mouseReleased(MouseEvent e) {
         isPressed = false;
-       // isMouseDragged = false;
-        x2 = e.getX();
-        y2 = e.getY();
+        x2 = (int) (e.getX() / zoom);
+        y2 = (int) (e.getY() / zoom);
+        System.out.println("mR");
         DrawObject.setNewRect(x1, y1, x2, y2);
         isReleased  = true;
-        //this.paintComponents(this.getGraphics());
         this.paintComponent(this.getGraphics());
         isReleased = false;
         System.out.println("Released");
@@ -274,12 +271,4 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     public void mouseExited(MouseEvent e) {
  
     }
-
-	@Override
-	public void mouseWheelMoved(MouseWheelEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 }
