@@ -76,7 +76,7 @@ public class MyHttpPost {
 		    while (line != null) {
 		    	if(line.startsWith("url")) {
 		        	url = line.substring(6);
-		        	if(!url.startsWith("http")) str = "Ошибка: сonfig.ini не настроен!";
+		        	if(!url.startsWith("http")) str = "Ошибка: Сonfig.ini не настроен!";
 		        	else b = true;
 		        	System.out.println(str);
 		        }

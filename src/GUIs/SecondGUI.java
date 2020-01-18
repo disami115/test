@@ -14,16 +14,16 @@ import Canvas.MyCanvas.DrawObjects;
 
 public class SecondGUI extends JFrame{
 	private static final long serialVersionUID = 1L;
-	private JButton ScreenButton = new JButton("Скриншот");
-	private JButton SaveButton = new JButton("Сохранить");
-	private JButton ArrowButton = new JButton("Стрелка");
-	private JButton BrushButton = new JButton("Кисть");
+	private JButton ScreenButton = new JButton("РЎРєСЂРёРЅС€РѕС‚");
+	private JButton SaveButton = new JButton("РЎРѕС…СЂР°РЅРёС‚СЊ");
+	private JButton ArrowButton = new JButton("РЎС‚СЂРµР»РєР°");
+	private JButton BrushButton = new JButton("РљРёСЃС‚СЊ");
 	private JButton Button1 = new JButton("1");
 	private JButton Button2 = new JButton("2");
 	private JButton Button3 = new JButton("3");
-	private JButton TextButton = new JButton("Текст");
-	private JButton BlurButton = new JButton("Замазать");
-	private JButton SaveServButton = new JButton("Сохранить на сервер");
+	private JButton TextButton = new JButton("РўРµРєСЃС‚");
+	private JButton BlurButton = new JButton("Р—Р°РјР°Р·Р°С‚СЊ");
+	private JButton SaveServButton = new JButton("РЎРѕС…СЂР°РЅРёС‚СЊ РЅР° СЃРµСЂРІРµСЂ");
 	private JButton OpenButton = new JButton("Open");
 	public CanvasPanel CanvPan;
 	public SelectCoordGui g2 = null;

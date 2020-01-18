@@ -3,12 +3,9 @@ package Saves;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import java.awt.Graphics;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public class SaveToFile extends JFrame
 {
@@ -21,8 +18,8 @@ public class SaveToFile extends JFrame
     private  JFileChooser fileChooser = null;
 	private BufferedImage bf;
     public SaveToFile() {
-        btnOpenDir = new JButton("Открыть директорию");
-        btnSaveFile = new JButton("Сохранить файл");
+        btnOpenDir = new JButton("РћС‚РєСЂС‹С‚СЊ РґРёСЂРµРєС‚РѕСЂРёСЋ");
+        btnSaveFile = new JButton("Р’С‹Р±СЂР°С‚СЊ С„Р°Р№Р»");
         fileChooser = new JFileChooser();
         addFileChooserListeners();
         JPanel contents = new JPanel();
@@ -35,7 +32,7 @@ public class SaveToFile extends JFrame
     	
     	btnOpenDir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                fileChooser.setDialogTitle("Выбор директории");
+                fileChooser.setDialogTitle("Р’С‹Р±РѕСЂ РґРёСЂРµРєС‚РѕСЂРёРё");
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 int result = fileChooser.showOpenDialog(SaveToFile.this);
                 if (result == JFileChooser.APPROVE_OPTION )
@@ -51,30 +48,10 @@ public class SaveToFile extends JFrame
         });
     	
     }
-        
-    public static void openDialog(Graphics g)
-    {
-        UIManager.put(
-                 "FileChooser.saveButtonText", "Сохранить");
-        UIManager.put(
-                 "FileChooser.cancelButtonText", "Отмена");
-        UIManager.put(
-                 "FileChooser.fileNameLabelText", "Наименование файла");
-        UIManager.put(
-                 "FileChooser.filesOfTypeLabelText", "Типы файлов");
-        UIManager.put(
-                 "FileChooser.lookInLabelText", "Директория");
-        UIManager.put(
-                 "FileChooser.saveInLabelText", "Сохранить в директории");
-        UIManager.put(
-                 "FileChooser.folderNameLabelText", "Путь директории");
-
-        new SaveToFile();
-    }
     
     public void TrySave(BufferedImage bf) {
     	File file = new File("Untitled");
-    	fileChooser.setDialogTitle("Сохранение файла");
+    	fileChooser.setDialogTitle("РЎРѕС…СЂР°РЅРёС‚СЊ С„Р°Р№Р»");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setSelectedFile(file);
         fileChooser.setAcceptAllFileFilterUsed(false);
@@ -90,14 +67,33 @@ public class SaveToFile extends JFrame
                 ImageIO.write(bf, type, file2);
             }  
             catch (Exception e1) {
-                System.out.println("Что-то пошло не так...");
             }
         }
     }
     
+    /*public static void openDialog(Graphics g)
+    {
+        UIManager.put(
+                 "FileChooser.saveButtonText", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+        UIManager.put(
+                 "FileChooser.cancelButtonText", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+        UIManager.put(
+                 "FileChooser.fileNameLabelText", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ");
+        UIManager.put(
+                 "FileChooser.filesOfTypeLabelText", "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
+        UIManager.put(
+                 "FileChooser.lookInLabelText", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+        UIManager.put(
+                 "FileChooser.saveInLabelText", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+        UIManager.put(
+                 "FileChooser.folderNameLabelText", "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+
+        new SaveToFile();
+    }
+    
     public BufferedImage TryOpen() {
     	File file = new File("Untitled");
-    	fileChooser.setDialogTitle("Открытие файла");
+    	fileChooser.setDialogTitle("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ");
     	
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setSelectedFile(file);
@@ -116,5 +112,5 @@ public class SaveToFile extends JFrame
 		return bf;
         }
         else return null;
-    }
+    }*/
 }

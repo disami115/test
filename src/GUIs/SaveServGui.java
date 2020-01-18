@@ -17,7 +17,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 public class SaveServGui extends JFrame{
 
 	private static final long serialVersionUID = 1L;
-	private JButton SaveButton = new JButton("Сохранить");
+	private JButton SaveButton = new JButton("РЎРѕС…СЂР°РЅРёС‚СЊ");
 	private JTextField LoginField = new JTextField();
 	private JTextField PasswordField = new JTextField();
 	private MyCanvas c;
@@ -27,7 +27,7 @@ public class SaveServGui extends JFrame{
 	
 	
 	public SaveServGui(MyCanvas c) {
-		super("Сохранение на сервер");
+		super("РќР° СЃРµСЂРІРµСЂ");
 		this.c = c;
 		this.setBounds((Screen.d.width-255)/2, (Screen.d.height-110)/2, 255, 110);
 		this.setLayout(null);
@@ -77,7 +77,7 @@ class SaveButtonEventListener implements ActionListener {
 				}
 			}
 			else {
-				showMessageDialog(null, "Не корректные логин и/или пароль.");
+				showMessageDialog(null, "РќРµ РєРѕСЂСЂРµРєС‚РЅС‹Р№ Р»РѕРіРёРЅ Рё/РёР»Рё РїР°СЂРѕР»СЊ.");
 			}
 			
 		}
