@@ -1,6 +1,5 @@
 package MouseDraw;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -19,8 +18,6 @@ public class DrawObjectBlur extends DrawObject {
 		Graphics g = this.g;
 		Graphics2D g2d  = (Graphics2D)g;
 		g2d.setColor(Color.red);
-		//AlphaComposite composite = AlphaComposite.SrcOver.derive( 0.9f );
-        //g2d.setComposite( composite );
         g2d.fillRect(r.x, r.y, r.width, r.height);
 		g2d.dispose();
 		return (Graphics)g2d;

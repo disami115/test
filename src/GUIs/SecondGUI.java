@@ -2,6 +2,7 @@ package GUIs;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
@@ -29,6 +30,12 @@ public class SecondGUI extends JFrame{
 	public MyCanvas c;
 	
 	public Graphics g;
+	
+	public static void main(String[] args) {
+		BufferedImage img = new BufferedImage(1,1,BufferedImage.TYPE_INT_RGB);
+		SecondGUI window = new SecondGUI((Image)img);
+		window.setVisible(true);
+	}
 	
 	public SecondGUI(Image img) {
 		super("ScreenSaver");
