@@ -64,7 +64,7 @@ public class MyHttpPost {
 		if(!new File("config.ini").exists()) {
 			new File("config.ini").createNewFile();
 			FileWriter w = new FileWriter("config.ini");
-			w.write("url = Напишите тут адрес сервера");
+			w.write("url = РќР°РїРёС€РёС‚Рµ С‚СѓС‚ Р°РґСЂРµСЃ СЃРµСЂРІРµСЂР°");
 			w.flush();
 			w.close();
 		}
@@ -76,7 +76,7 @@ public class MyHttpPost {
 		    while (line != null) {
 		    	if(line.startsWith("url")) {
 		        	url = line.substring(6);
-		        	if(!url.startsWith("http")) str = "Ошибка: Сonfig.ini не настроен!";
+		        	if(!url.startsWith("http")) str = "РћС€РёР±РєР°: config.ini РЅРµ РЅР°СЃС‚СЂРѕРµРЅ!";
 		        	else b = true;
 		        	System.out.println(str);
 		        }
