@@ -16,7 +16,7 @@ public class SaveToFile extends JFrame
 	private  JButton  btnSaveFile   = null;
     private  JButton  btnOpenDir    = null;
     private  JFileChooser fileChooser = null;
-	private BufferedImage bf;
+	//private BufferedImage bf;
     public SaveToFile() {
         btnOpenDir = new JButton("Открыть директорию");
         btnSaveFile = new JButton("Выбрать файл");
