@@ -6,6 +6,7 @@ import MouseDraw.DrawObject;
 import MouseDraw.DrawObjectArrow;
 import MouseDraw.DrawObjectBlur;
 import MouseDraw.DrawObjectBrush;
+import MouseDraw.DrawObjectLine;
 import MouseDraw.DrawObjectOne;
 import MouseDraw.DrawObjectText;
 import MouseDraw.DrawObjectThree;
@@ -49,8 +50,7 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     	DrawObjectBrush,
     	DrawObjectArrow,
     	DrawObjectOne,
-    	DrawObjectTwo,
-    	DrawObjectThree,
+    	DrawObjectLine,
     	DrawObjectBlur,
     	DrawObjectText
     }
@@ -65,6 +65,10 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         changeDrawObjects(DrawObjects.DrawObjectBrush.toString());
         setDrawObject(dOs, (Graphics2D) this.getGraphics());
         
+    }
+    
+    public String getDrawObject() {
+    	return ""+dOs.name();
     }
     
     public void changeDrawObjects(String s) {
@@ -83,11 +87,8 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     		case DrawObjectOne: 
     			this.drawObj = new DrawObjectOne(g2s, this.e);
     			break;
-    		case DrawObjectTwo: 
-    			this.drawObj = new DrawObjectTwo(g2s, this.e);
-    			break;
-    		case DrawObjectThree: 
-    			this.drawObj = new DrawObjectThree(g2s, this.e);
+    		case DrawObjectLine: 
+    			this.drawObj = new DrawObjectLine(g2s, this.e);
     			break;
     		case DrawObjectBlur: 
     			this.drawObj = new DrawObjectBlur(g2s, this.e);

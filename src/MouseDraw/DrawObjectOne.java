@@ -7,9 +7,19 @@ import java.awt.event.MouseEvent;
 
 public class DrawObjectOne extends DrawObject {
 
+	private static int i = 0;
 	public DrawObjectOne(Graphics g, MouseEvent e) {
 		super(g, e);
 		// TODO Auto-generated constructor stub
+	}
+	
+	public static String getI() {
+		return ""+i;
+	}
+	
+	public static void changeI() {
+		if(i == 9) i = -1;
+		i++;
 	}
 
 	@Override
@@ -19,7 +29,7 @@ public class DrawObjectOne extends DrawObject {
 		g.setColor(c);
 		g.drawOval(x2-9, y2-22, 30, 30);
 		g.setFont(f);
-		g.drawString("1", x2, y2);
+		g.drawString(""+i, x2, y2);
 		g.dispose();
 		return g;
 	}

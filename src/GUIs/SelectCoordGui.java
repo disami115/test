@@ -8,15 +8,18 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JWindow;
 import Screens.Screen;
 
-public class SelectCoordGui extends JWindow implements MouseListener, MouseMotionListener{
+public class SelectCoordGui extends JFrame implements MouseListener, MouseMotionListener, KeyListener{
 
 	private static final long serialVersionUID = 1L;
 	private static Dimension d = Toolkit.getDefaultToolkit ().getScreenSize ();
@@ -34,9 +37,13 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
 	private static Rectangle r;
 	private SecondGUI SecG;
 	private ImageDraw imgD;
-	
+	private static int lastX = 0, lastY = 0;	
 	public SelectCoordGui(Image img, SecondGUI SecG) {
 		setDefault(img, SecG);
+		addKeyListener(this);
+		//setFocusableWindowState(true);
+		//setFocusable(true);
+		setUndecorated(true);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	    this.setBounds(0, 0, d.width, d.height);
@@ -60,6 +67,7 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
 	    imgD = new ImageDraw(img, null);
 	    getContentPane().add(imgD);
 	    bf = Screen.grabScreen();
+	    System.out.println(img.getHeight(null));
 	}
 
 	public static void setXYWH(int x1, int x2, int y1, int y2){
@@ -118,6 +126,8 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
         y2 = e.getY() ;
         Screen.setXYWH(x1,x2,y1,y2);
         if(isPressed) img = bf.getSubimage(r.x, r.y, r.width+1, r.height+1);
+        lastX = r.x;
+        lastY = r.y;
         SecG.setNewImage(img);
 		SecG.setVisible(true);
 		this.setVisible(false);
@@ -155,6 +165,33 @@ public class SelectCoordGui extends JWindow implements MouseListener, MouseMotio
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			int[] HW = SecG.getImgHW();
+			System.out.println(lastX + " " + lastY + " " + (lastX+HW[1]) + " " + (lastY+HW[0]));
+			if(HW[0] == 0 || HW[1] == 0) {
+				HW[0] = 1;
+				HW[1] = 1;
+			}
+			img = bf.getSubimage(lastX, lastY, HW[1], HW[0]);
+			SecG.setNewImage(img);
+			SecG.setVisible(true);
+			this.setVisible(false);
+		}
 	}
 	
 }

@@ -2,7 +2,6 @@ package MouseDraw;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -31,7 +30,7 @@ public class DrawObjectArrow extends DrawObject {
 		if(x1 >= x2 && y1 < y2) g.rotate(-dang-ang, x, y);
 		if(x1 < x2 && y1 >= y2) g.rotate(dang-ang, x, y);
 		if(x1 < x2 && y1 < y2) g.rotate(ang+dang, x, y);
-		g.setStroke(new BasicStroke(4.0f));
+		g.setStroke(new BasicStroke(3.0f));
 		g.drawLine(x, y, x, y-d);
 		if(d > 20) {
 			g.drawLine(x, yd, x - 10, yd + 20);
