@@ -14,7 +14,14 @@ public class DrawObjectBrush extends DrawObject {
 	public Graphics Draws(int x1, int y1, int x2, int y2, Color c) {
 		Graphics g = this.g;
 		g.setColor(c);
-		//g.fillOval(r.x, r.y , 10, 10);
+		g.fillOval(x2, y2, 10, 10);
+		g.dispose();
+		return g;
+	}
+	
+	public Graphics Draws(int x2, int y2, Color c) {
+		Graphics g = this.g;
+		g.setColor(c);
 		g.fillOval(x2, y2, 10, 10);
 		g.dispose();
 		return g;
