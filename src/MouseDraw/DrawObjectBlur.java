@@ -17,7 +17,7 @@ public class DrawObjectBlur extends DrawObject {
 		setNewRect(x1,y1,x2,y2);
 		Graphics g = this.g;
 		Graphics2D g2d  = (Graphics2D)g;
-		g2d.setColor(Color.red);
+		g2d.setColor(c);
         g2d.fillRect(r.x, r.y, r.width, r.height);
 		g2d.dispose();
 		return (Graphics)g2d;

@@ -15,7 +15,7 @@ public class DrawObjectLine extends DrawObject {
 	@Override
 	public Graphics Draws(int x1, int y1, int x2, int y2, Color c) {
 		Graphics2D g = (Graphics2D) this.g;
-		g.setColor(Color.black);
+		g.setColor(c);
 		g.drawLine(x1, y1, x2, y2);
 		g.dispose();
 		return g;

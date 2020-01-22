@@ -41,6 +41,7 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	private JButton BlurButton = new JButton("Замазать");
 	private JButton SaveServButton = new JButton("Сохранить на сервер");
 	private JButton OpenButton = new JButton("Open");
+	private JButton ColorButton = new JButton("Color");
 	public CanvasPanel CanvPan;
 	public SelectCoordGui g2 = null;
 	public MyCanvas c;
@@ -49,10 +50,11 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	private static int imdH;
 	private static int imdW;
 	private TrayIcon icon = null;
+	private Color color;
 	
 	public SecondGUI(Image img) throws IOException {
 		super("ScreenSaver");
-		/*try {
+		try {
 			GlobalScreen.registerNativeHook();
 		}
 		catch (NativeHookException ex) {
@@ -60,7 +62,8 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 			System.err.println(ex.getMessage());
 
 			System.exit(1);
-		}*/
+		}
+		color = Color.black;
 		g1 = this;
 		GlobalScreen.addNativeKeyListener(this);
 		File fIco = new File("screenshot.png");
@@ -86,6 +89,7 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		OpenButton.addActionListener(new OpenButtonEventListener());
 		BrushButton.addActionListener(new BrushButtonEventListener());
 		SaveServButton.addActionListener(new SaveServButtonEventListener());
+		ColorButton.addActionListener(new ColorButtonEventListener());
 		JMenuBar BP = new JMenuBar();
 		BP.add(ScreenButton);
 		BP.add(BrushButton);
@@ -94,6 +98,7 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		BP.add(Button1);
 		BP.add(TextButton);
 		BP.add(BlurButton);
+		BP.add(ColorButton);
 		BP.add(SaveButton);
 		BP.add(SaveServButton);
 	    setJMenuBar(BP);
@@ -228,6 +233,15 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		}
 	}
 
+	class ColorButtonEventListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent e) {
+			color = JColorChooser.showDialog(null, "Цвет", null);
+			c.setColor(color);
+		}
+	}
+	
+	
 	class OpenButtonEventListener implements ActionListener {
 	
 		public void actionPerformed(ActionEvent e) {
@@ -254,6 +268,10 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	public void nativeKeyTyped(NativeKeyEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public Color getColor() {
+		return color;
 	}
 
 }

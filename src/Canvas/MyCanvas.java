@@ -48,6 +48,7 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
 	private MyCanvas mc = null;
 	private int lastX = 0;
 	private int lastY = 0;
+	private Color color;
     
     public enum DrawObjects{
     	DrawObjectBrush,
@@ -58,6 +59,7 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     	DrawObjectText
     }
     public MyCanvas(double zoom, Image img) {
+    	color = Color.black;
         this.zoom = zoom;
         this.img = img;
         mc = this;
@@ -131,22 +133,20 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         Graphics2D g2d = (Graphics2D) g.create();
         g2s.drawImage(img, 0, 0, null);
         g2d.transform(tx);
-        g2s.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON); //сглаживание
+        g2s.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         g2s.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         if(drawObj != null){
 	        setDrawObject(dOs,g2s);
 	        if(isPressed && dOs.name() == "DrawObjectBrush") {
-					
 					if(lastX != 0 && lastY != 0) 
 						{
-						System.out.println(x2 + " " + y2 + " " + lastX + " " + lastY);
 						DrawBrushLine bl = new DrawBrushLine(g2s,e);
-						g2s = (Graphics2D) bl.Draws(lastX, lastY, x2, y2, Color.red);
+						g2s = (Graphics2D) bl.Draws(lastX, lastY, x2, y2, color);
 						}
 					lastX = x2;
 					lastY = y2;
 			}
-	        else if(isReleased) g2s = (Graphics2D) drawObj.Draws(x1, y1, x2, y2, Color.red);
+	        else if(isReleased) g2s = (Graphics2D) drawObj.Draws(x1, y1, x2, y2, color);
         }
         super.paintComponent(g2s);
         g2s.dispose();
@@ -158,16 +158,16 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
   
     protected void repaint(Graphics g, MouseEvent e) {
     	super.paintComponent(g);
-
         x2 = e.getX();
 		y2 = e.getY();
 		x1 = rx1;
 		y1 = ry1;
-		
 		Graphics2D g2d  = (Graphics2D)g;
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
     	g2d.drawImage(img, 0, 0, (int)(img.getWidth(null)* zoom), (int)(img.getHeight(null)*zoom), this);
     	setDrawObject(dOs,g2d);
-    	g2d = (Graphics2D) drawObj.Draws((int)(x1 * zoom), (int)(y1 *zoom), x2, y2, Color.red);
+    	g2d = (Graphics2D) drawObj.Draws((int)(x1 * zoom), (int)(y1 *zoom), x2, y2, color);
         g2d.transform(tx);
         g2d.dispose();
     }
@@ -201,9 +201,7 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         else zoom = 1;
         System.out.println(e);
         Dimension d = null;
-        
         	d = new Dimension((int)(initialSize.width*zoom),(int)(initialSize.height*zoom));
-       
                 setPreferredSize(d);
                 setSize(d);
                 validate();
@@ -252,7 +250,6 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         }
         scrollX = point.getX()/previousZoom*zoom - (point.getX()-visibleRect.getX());
         scrollY = point.getY()/previousZoom*zoom - (point.getY()-visibleRect.getY());
-        System.out.println(scrollX + " " + scrollY + " " + visibleRect.getWidth() + " " + visibleRect.getHeight());
         visibleRect.setRect(scrollX, scrollY, visibleRect.getWidth(), visibleRect.getHeight());
         scrollRectToVisible(visibleRect);
     }
@@ -285,7 +282,6 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
 		y1 = (int) (e.getY() / zoom);
 		rx1 = x1;
 		ry1 = y1;
-		System.out.println(rx1 + " " + ry1);
     }
  
     public void mouseReleased(MouseEvent e) {
@@ -299,7 +295,6 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         isReleased = false;
         lastX = 0;
         lastY = 0;
-        System.out.println("Released");
     }
  
     public void mouseEntered(MouseEvent e) {
@@ -308,5 +303,9 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
  
     public void mouseExited(MouseEvent e) {
  
+    }
+    
+    public void setColor(Color color) {
+    	this.color = color;
     }
 }

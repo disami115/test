@@ -25,7 +25,7 @@ public class DrawObjectArrow extends DrawObject {
 		int yd = y-d;
 		double ang = Math.asin(a/d);
 		double dang = Math.toRadians(90);
-		g.setColor(Color.black);
+		g.setColor(c);
 		if(x > x2 && y >= y2) g.rotate(ang-dang, x, y);
 		if(x1 >= x2 && y1 < y2) g.rotate(-dang-ang, x, y);
 		if(x1 < x2 && y1 >= y2) g.rotate(dang-ang, x, y);
