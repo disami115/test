@@ -14,7 +14,7 @@ public class DrawObjectOne extends DrawObject {
 	}
 	
 	public static String getI() {
-		return ""+i;
+		return i + ".png";
 	}
 	
 	public static void changeI() {
