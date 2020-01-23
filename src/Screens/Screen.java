@@ -7,6 +7,9 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.awt.AWTException;
 import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import javax.swing.filechooser.FileSystemView;
@@ -38,14 +41,21 @@ public class Screen {
 	public static BufferedImage grabScreen() { 
 		BufferedImage image = null;
         try {
-        	image = new Robot().createScreenCapture(r);
-            //SaveScreen(image);
-            return image;
+        	for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+        	    r = r.union(gd.getDefaultConfiguration().getBounds());
+        	}
+        	BufferedImage capture = new Robot().createScreenCapture(r);
+        	//image = new Robot().createScreenCapture(r);
+            //return image;
+        	System.out.println(r.getWidth());
+        	return capture;
         } catch (AWTException e) {
             e.printStackTrace();
         } return null;
         
 	}
+	
+	
 	
 	
 	public static void setXYWH(int x1, int x2, int y1, int y2){

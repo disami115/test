@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -46,12 +48,23 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
 		setUndecorated(true);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		Rectangle screenRect = new Rectangle(0, 0, 0, 0);
+		for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+			screenRect = screenRect.union(gd.getDefaultConfiguration().getBounds());
+		}
+		d.setSize(screenRect.width, screenRect.height);
 	    this.setBounds(0, 0, d.width, d.height);
 	    
 	}
 	
 	public void setDefault(Image img,  SecondGUI SecG) {
 		Dimension d = Toolkit.getDefaultToolkit ().getScreenSize ();
+		Rectangle screenRect = new Rectangle(0, 0, 0, 0);
+		for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+			screenRect = screenRect.union(gd.getDefaultConfiguration().getBounds());
+		}
+	    System.out.println(screenRect.width);
+		d.setSize(screenRect.width, screenRect.height);
 		lx = 0;
 		ly = 0;
 		bx = d.width;
@@ -67,7 +80,6 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
 	    imgD = new ImageDraw(img, null);
 	    getContentPane().add(imgD);
 	    bf = Screen.grabScreen();
-	    System.out.println(img.getHeight(null));
 	}
 
 	public static void setXYWH(int x1, int x2, int y1, int y2){
@@ -96,6 +108,7 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
 	    	g2d.drawImage(img, 0, 0, this);
 	        AlphaComposite composite = AlphaComposite.SrcOver.derive( 0.3f );
             g2d.setComposite( composite );
+            System.out.println("d.width" + d.width);
             g2d.fillRect(0, 0, d.width, d.height);
 	        g2d.dispose();
 	    }
