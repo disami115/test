@@ -39,6 +39,7 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
 	private static Rectangle r;
 	private SecondGUI SecG;
 	private ImageDraw imgD;
+	private Rectangle screenRect = null;
 	private static int lastX = 0, lastY = 0;	
 	public SelectCoordGui(Image img, SecondGUI SecG) {
 		setDefault(img, SecG);
@@ -55,20 +56,21 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
 			
 		}
 		//screenRect.setBounds((int)(screenRect.getX() - screenRect.getX()), (int)screenRect.getY(), screenRect.width, screenRect.height);
+		//screenRect.setBounds(0, 0, screenRect.width, screenRect.height);
 		d.setSize(screenRect.width, screenRect.height);
 		System.out.println("x = " + screenRect.getBounds());
-	    this.setBounds(0, 0, d.width, d.height);
+	    this.setBounds(screenRect.x, screenRect.y, d.width, d.height);
 	    
 	}
 	
 	public void setDefault(Image img,  SecondGUI SecG) {
 		Dimension d = Toolkit.getDefaultToolkit ().getScreenSize ();
-		Rectangle screenRect = new Rectangle(0, 0, 0, 0);
+		screenRect = new Rectangle(0, 0, 0, 0);
 		for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
 			screenRect = screenRect.union(gd.getDefaultConfiguration().getBounds());
 		}
-		//screenRect.setBounds((int)(screenRect.getX() - screenRect.getX()), (int)screenRect.getY(), screenRect.width, screenRect.height);
-	    System.out.println(screenRect.width);
+		//screenRect.setBounds(0, 0, screenRect.width, screenRect.height);
+		System.out.println(screenRect.width);
 		d.setSize(screenRect.width, screenRect.height);
 		lx = 0;
 		ly = 0;
@@ -113,8 +115,8 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
 	    	g2d.drawImage(img, 0, 0, this);
 	        AlphaComposite composite = AlphaComposite.SrcOver.derive( 0.3f );
             g2d.setComposite( composite );
-            System.out.println("d.width" + d.width);
-            g2d.fillRect(0, 0, d.width, d.height);
+            System.out.println("screenRect.x " + screenRect.x +" screenRect.y " + screenRect.y +" screenRect.width " + screenRect.width +" screenRect.height " + screenRect.height);
+            g2d.fillRect(screenRect.x, screenRect.y, screenRect.width - screenRect.x, screenRect.height);
 	        g2d.dispose();
 	    }
 	    

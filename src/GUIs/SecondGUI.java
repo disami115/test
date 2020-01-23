@@ -52,7 +52,7 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	
 	public SecondGUI(Image img) throws IOException {
 		super("ScreenSaver");
-		/*try {
+		try {
 			GlobalScreen.registerNativeHook();
 		}
 		catch (NativeHookException ex) {
@@ -60,7 +60,7 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 			//System.err.println(ex.getMessage());
 
 			System.exit(1);
-		}*/
+		}
 		color = Color.black;
 		g1 = this;
 		GlobalScreen.addNativeKeyListener(this);

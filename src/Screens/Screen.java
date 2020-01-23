@@ -49,8 +49,8 @@ public class Screen {
         	   // System.out.println(if GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds());
         	    
         	}
-        	r.setBounds((int)(r.getX() - r.getX()), (int)r.getY(), r.width, r.height);
-        	
+        	//r.setBounds(0, 0, r.width, r.height);
+        	System.out.println(r);
         	BufferedImage capture = new Robot().createScreenCapture(r);
         	//image = new Robot().createScreenCapture(r);
             //return image;
