@@ -22,6 +22,7 @@ public class Screen {
 	private static int bx = d.width;
 	private static int by = d.height;
 	public static Rectangle r = new Rectangle(lx, ly, bx-lx, by-ly);
+	
 
 	public static void SaveScreen(BufferedImage img, String name)
 	{
@@ -42,8 +43,14 @@ public class Screen {
 		BufferedImage image = null;
         try {
         	for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+        		
+        		
         	    r = r.union(gd.getDefaultConfiguration().getBounds());
+        	   // System.out.println(if GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds());
+        	    
         	}
+        	r.setBounds((int)(r.getX() - r.getX()), (int)r.getY(), r.width, r.height);
+        	
         	BufferedImage capture = new Robot().createScreenCapture(r);
         	//image = new Robot().createScreenCapture(r);
             //return image;

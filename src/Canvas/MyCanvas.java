@@ -17,13 +17,15 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
  
  
-public class MyCanvas extends JComponent implements MouseWheelListener, MouseMotionListener, MouseListener  {
+public class MyCanvas extends JComponent implements MouseWheelListener, MouseMotionListener, MouseListener {
 	
 	private static final long serialVersionUID = 1L;
 	private double zoom = 1.0;
     private Image img;
+    private Image lastImg;
     public static final double SCALE_STEP = 0.05d;
     private Dimension initialSize;
     private AffineTransform tx = new AffineTransform();
@@ -49,7 +51,10 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
 	private int lastX = 0;
 	private int lastY = 0;
 	private Color color;
-    
+	private ArrayList<Image> listOfBf = new ArrayList<Image>();
+    private int numberOfGraphicsList = -1;
+    private BufferedImage tempBf = null;
+	
     public enum DrawObjects{
     	DrawObjectBrush,
     	DrawObjectArrow,
@@ -67,15 +72,10 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         addMouseWheelListener(this);
         addMouseMotionListener(this);
         addMouseListener(this);
-        //setAutoscrolls(true);
         changeDrawObjects(DrawObjects.DrawObjectBrush.toString());
         setDrawObject(dOs, (Graphics2D) this.getGraphics());
-    	//Dimension d = new Dimension(
-        //        (int)(img.getWidth(null)*zoom),
-       //         (int)(img.getHeight(null)*zoom));
-    	//System.out.println(d.height + " " + d.width + "repaint");
-       // setPreferredSize(d);
-       // setSize(d);
+        listOfBf.add(img);
+        numberOfGraphicsList = 0;
         initialSize = new Dimension(
                   (int)(img.getWidth(null)*zoom),
                   (int)(img.getHeight(null)*zoom));
@@ -131,7 +131,9 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         super.paintComponent(g);
         Graphics2D g2s = bufferedImage.createGraphics();
         Graphics2D g2d = (Graphics2D) g.create();
-        g2s.drawImage(img, 0, 0, null);
+        System.out.println("paintC " + numberOfGraphicsList + " " + (listOfBf.size()));
+        if(isPressed && dOs.name() == "DrawObjectBrush") g2s.drawImage(img, 0, 0, null);
+        else g2s.drawImage(listOfBf.get(numberOfGraphicsList), 0, 0, null);
         g2d.transform(tx);
         g2s.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         g2s.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -151,13 +153,17 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         super.paintComponent(g2s);
         g2s.dispose();
 		img = bufferedImage;
+		lastImg = img;
         if (img != null) {
-            g2d.drawImage(img, 0, 0, this);
+        	g2d.drawImage(img, 0, 0, null);
+        //	else g2d.drawImage(listOfBf.get(numberOfGraphicsList), 0, 0, null);
         }
+	   
     }
   
     protected void repaint(Graphics g, MouseEvent e) {
     	super.paintComponent(g);
+    	System.out.println("repaint " + numberOfGraphicsList + " " + (listOfBf.size()-1));
         x2 = e.getX();
 		y2 = e.getY();
 		x1 = rx1;
@@ -165,7 +171,7 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
 		Graphics2D g2d  = (Graphics2D)g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-    	g2d.drawImage(img, 0, 0, (int)(img.getWidth(null)* zoom), (int)(img.getHeight(null)*zoom), this);
+        g2d.drawImage(img, 0, 0, null);
     	setDrawObject(dOs,g2d);
     	g2d = (Graphics2D) drawObj.Draws((int)(x1 * zoom), (int)(y1 *zoom), x2, y2, color);
         g2d.transform(tx);
@@ -207,7 +213,7 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
                 validate();
                 followMouseOrCenter(e);
                 translate(e);
-                repaint();
+               // repaint();
             previousZoom = zoom;
         
         
@@ -267,6 +273,7 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
         else {
     		this.repaint(this.getGraphics(), e);
         }
+        System.out.println("md");
     }
  
     public void mouseMoved(MouseEvent e) {
@@ -285,13 +292,30 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     }
  
     public void mouseReleased(MouseEvent e) {
-        isPressed = false;
+    	System.out.println("mr " + numberOfGraphicsList + " " + listOfBf.size());
+    	if(isPressed && dOs.name() == "DrawObjectBrush") {
+    		//this.paintComponent(this.getGraphics());
+    		//isPressed = false;
+    	}
         x2 = (int) (e.getX() / zoom);
         y2 = (int) (e.getY() / zoom);
-        System.out.println("mR");
         DrawObject.setNewRect(x1, y1, x2, y2);
         isReleased  = true;
         this.paintComponent(this.getGraphics());
+        if(listOfBf.size() - 1 != numberOfGraphicsList) {
+    		System.out.println("if " + numberOfGraphicsList + " " + listOfBf.size());
+    		int ls = listOfBf.size();
+    		for(int i = ls-1; i > numberOfGraphicsList; i--) {
+    			System.out.println("for " + i);
+    			listOfBf.remove(i);
+    		}
+    	}
+    	tempBf = new BufferedImage(this.img.getWidth(null), this.img.getHeight(null), BufferedImage.TYPE_INT_RGB);
+    	Graphics2D g2s = tempBf.createGraphics();
+    	g2s.drawImage(img, 0, 0, (int)(img.getWidth(null)* zoom), (int)(img.getHeight(null)*zoom), this);
+        listOfBf.add(tempBf);
+    	numberOfGraphicsList = listOfBf.size()-1;
+    	isPressed = false;
         isReleased = false;
         lastX = 0;
         lastY = 0;
@@ -308,4 +332,21 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     public void setColor(Color color) {
     	this.color = color;
     }
+    
+    public void setLastGraphics(Graphics2D g) {
+    	if(numberOfGraphicsList > 0) {
+    		numberOfGraphicsList = numberOfGraphicsList - 1;
+            System.out.println("slg " + numberOfGraphicsList);
+    	}
+    	this.paintComponent(this.getGraphics());
+    }
+    
+    public void setNextGraphics(Graphics2D g) {
+    	if(numberOfGraphicsList < (listOfBf.size() - 1)) {
+    		numberOfGraphicsList = numberOfGraphicsList + 1;
+            System.out.println("sng " + numberOfGraphicsList);
+    	}
+    	this.paintComponent(this.getGraphics());
+    }
+
 }

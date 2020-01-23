@@ -50,9 +50,13 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
 		addMouseMotionListener(this);
 		Rectangle screenRect = new Rectangle(0, 0, 0, 0);
 		for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+			
 			screenRect = screenRect.union(gd.getDefaultConfiguration().getBounds());
+			
 		}
+		//screenRect.setBounds((int)(screenRect.getX() - screenRect.getX()), (int)screenRect.getY(), screenRect.width, screenRect.height);
 		d.setSize(screenRect.width, screenRect.height);
+		System.out.println("x = " + screenRect.getBounds());
 	    this.setBounds(0, 0, d.width, d.height);
 	    
 	}
@@ -63,6 +67,7 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
 		for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
 			screenRect = screenRect.union(gd.getDefaultConfiguration().getBounds());
 		}
+		//screenRect.setBounds((int)(screenRect.getX() - screenRect.getX()), (int)screenRect.getY(), screenRect.width, screenRect.height);
 	    System.out.println(screenRect.width);
 		d.setSize(screenRect.width, screenRect.height);
 		lx = 0;
@@ -138,6 +143,7 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
 		x2 = e.getX() ;
         y2 = e.getY() ;
         Screen.setXYWH(x1,x2,y1,y2);
+        System.out.println(r);
         if(isPressed) img = bf.getSubimage(r.x, r.y, r.width+1, r.height+1);
         lastX = r.x;
         lastY = r.y;

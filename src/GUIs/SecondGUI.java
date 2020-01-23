@@ -37,7 +37,6 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	private JButton TextButton = new JButton();
 	private JButton BlurButton = new JButton();
 	private JButton SaveServButton = new JButton();
-	private JButton OpenButton = new JButton("Open");
 	private JButton ColorButton = new JButton();
 	public CanvasPanel CanvPan;
 	public SelectCoordGui g2 = null;
@@ -49,6 +48,7 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	private TrayIcon icon = null;
 	private ImageIcon imgico = null;
 	private Color color;
+	private boolean isCtrl = false;
 	
 	public SecondGUI(Image img) throws IOException {
 		super("ScreenSaver");
@@ -56,8 +56,8 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 			GlobalScreen.registerNativeHook();
 		}
 		catch (NativeHookException ex) {
-			System.err.println("There was a problem registering the native hook.");
-			System.err.println(ex.getMessage());
+			//System.err.println("There was a problem registering the native hook.");
+			//System.err.println(ex.getMessage());
 
 			System.exit(1);
 		}*/
@@ -77,7 +77,6 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		this.setLayout(new BorderLayout());
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		LineButton.setIcon(setIcon("line.png"));
 		ArrowButton.setIcon(setIcon("arrow.png"));
         ScreenButton.setIcon(setIcon("screen.png"));
@@ -88,7 +87,6 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
         SaveButton.setIcon(setIcon("save.png"));
         SaveServButton.setIcon(setIcon("server.png"));
         ColorButton.setIcon(setIcon("color.png"));
-        //ColorButton.setBackground(color);
 		ScreenButton.addActionListener(new ScreenButtonEventListener());
 		ArrowButton.addActionListener(new ArrowButtonEventListener());
 		Button1.addActionListener(new Button1EventListener());
@@ -96,7 +94,6 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		TextButton.addActionListener(new TextButtonEventListener());
 		BlurButton.addActionListener(new BlurButtonEventListener());
 		SaveButton.addActionListener(new SaveButtonEventListener());
-		OpenButton.addActionListener(new OpenButtonEventListener());
 		BrushButton.addActionListener(new BrushButtonEventListener());
 		SaveServButton.addActionListener(new SaveServButtonEventListener());
 		ColorButton.addActionListener(new ColorButtonEventListener());
@@ -252,24 +249,20 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 			c.setColor(color);
 		}
 	}
-	
-	
-	class OpenButtonEventListener implements ActionListener {
-	
-		public void actionPerformed(ActionEvent e) {
-		}
-	}
 
 
 	@Override
-	public void nativeKeyPressed(NativeKeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public void nativeKeyPressed(NativeKeyEvent e) {
+		if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL) isCtrl = true;
 		
 	}
 
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent e) {
-		System.out.println("Key Pressed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
+		System.out.println("Key Pressed: " + NativeKeyEvent.getKeyText(e.getKeyCode()) + " " + isCtrl);
+		if(e.getKeyCode() == NativeKeyEvent.VC_Z && isCtrl) c.setLastGraphics((Graphics2D) c.getGraphics());
+		if(e.getKeyCode() == NativeKeyEvent.VC_Y && isCtrl) c.setNextGraphics((Graphics2D) c.getGraphics());
+		if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL) isCtrl = false;
 		if(e.getKeyCode() == NativeKeyEvent.VC_PRINTSCREEN) {
 			this.expand();
 			doScreen();
@@ -277,9 +270,8 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	}
 
 	@Override
-	public void nativeKeyTyped(NativeKeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void nativeKeyTyped(NativeKeyEvent e) {
+		//if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL) System.out.println(isCtrl + " " + e.getKeyCode());
 	}
 
 	public Color getColor() {
