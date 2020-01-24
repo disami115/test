@@ -53,7 +53,7 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
 	private Color color;
 	private ArrayList<Image> listOfBf = new ArrayList<Image>();
     private int numberOfGraphicsList = -1;
-    private BufferedImage tempBf = null;
+    public static BufferedImage tempBf = null;
 	
     public enum DrawObjects{
     	DrawObjectBrush,
@@ -292,15 +292,12 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     }
  
     public void mouseReleased(MouseEvent e) {
-    	System.out.println("mr " + numberOfGraphicsList + " " + listOfBf.size());
-    	if(isPressed && dOs.name() == "DrawObjectBrush") {
-    		//this.paintComponent(this.getGraphics());
-    		//isPressed = false;
-    	}
         x2 = (int) (e.getX() / zoom);
         y2 = (int) (e.getY() / zoom);
         DrawObject.setNewRect(x1, y1, x2, y2);
         isReleased  = true;
+        tempBf = new BufferedImage(this.img.getWidth(null), this.img.getHeight(null), BufferedImage.TYPE_INT_RGB);
+        if(dOs.name() == "DrawObjectBlur") DrawObjectBlur.setBlur();
         this.paintComponent(this.getGraphics());
         if(listOfBf.size() - 1 != numberOfGraphicsList) {
     		System.out.println("if " + numberOfGraphicsList + " " + listOfBf.size());
@@ -310,7 +307,7 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
     			listOfBf.remove(i);
     		}
     	}
-    	tempBf = new BufferedImage(this.img.getWidth(null), this.img.getHeight(null), BufferedImage.TYPE_INT_RGB);
+    	
     	Graphics2D g2s = tempBf.createGraphics();
     	g2s.drawImage(img, 0, 0, (int)(img.getWidth(null)* zoom), (int)(img.getHeight(null)*zoom), this);
         listOfBf.add(tempBf);
@@ -347,6 +344,10 @@ public class MyCanvas extends JComponent implements MouseWheelListener, MouseMot
             System.out.println("sng " + numberOfGraphicsList);
     	}
     	this.paintComponent(this.getGraphics());
+    }
+    
+    public static BufferedImage getBf() {
+    	return bufferedImage;
     }
 
 }

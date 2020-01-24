@@ -4,14 +4,19 @@ package GUIs;
 import static java.awt.SystemTray.getSystemTray;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import Saves.SaveToFile;
 import Screens.Screen;
 import Canvas.CanvasPanel;
@@ -38,6 +43,8 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	private JButton BlurButton = new JButton();
 	private JButton SaveServButton = new JButton();
 	private JButton ColorButton = new JButton();
+	private JSlider SizeSlider = new JSlider(1, 10, 2);
+	private static double sizeDrawObject = 2.0;
 	public CanvasPanel CanvPan;
 	public SelectCoordGui g2 = null;
 	public MyCanvas c;
@@ -50,7 +57,7 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	private Color color;
 	private boolean isCtrl = false;
 	
-	public SecondGUI(Image img) throws IOException {
+	public SecondGUI(Image img) throws IOException, URISyntaxException {
 		super("ScreenSaver");
 		try {
 			GlobalScreen.registerNativeHook();
@@ -64,8 +71,12 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		color = Color.black;
 		g1 = this;
 		GlobalScreen.addNativeKeyListener(this);
-		File fIco = new File("screenshot.png");
-        Image ico = ImageIO.read(fIco);
+		URL url = getClass().getResource("screenshot.png");
+		InputStream in = SecondGUI.class.getClassLoader().getResourceAsStream("screenshot.png");
+		//System.out.println("hi " + in.toString());
+		//File fIco = new File(in.toString());
+		//System.out.println(fIco);
+        Image ico = ImageIO.read(in);
         setIconImage(ico);
 		c = new MyCanvas(1.0, img);
 		CanvPan = new CanvasPanel(true, c);
@@ -77,6 +88,8 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		this.setLayout(new BorderLayout());
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		SizeSlider.setMajorTickSpacing(1);
+		SizeSlider.setPaintLabels(true);
 		LineButton.setIcon(setIcon("line.png"));
 		ArrowButton.setIcon(setIcon("arrow.png"));
         ScreenButton.setIcon(setIcon("screen.png"));
@@ -97,6 +110,7 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		BrushButton.addActionListener(new BrushButtonEventListener());
 		SaveServButton.addActionListener(new SaveServButtonEventListener());
 		ColorButton.addActionListener(new ColorButtonEventListener());
+		SizeSlider.addChangeListener(new SizeChangeEventListener());
 		JMenuBar BP = new JMenuBar();
 		BP.add(ScreenButton);
 		BP.add(BrushButton);
@@ -108,7 +122,10 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		BP.add(ColorButton);
 		BP.add(SaveButton);
 		BP.add(SaveServButton);
+		BP.add(SizeSlider);
+		
 	    setJMenuBar(BP);
+	    
 	    if (SystemTray.isSupported()) {
             icon = new TrayIcon(ico);
             icon.setImageAutoSize(true);
@@ -194,7 +211,15 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 			System.out.println(c.getDrawObject() + " " + DrawObjects.DrawObjectOne.toString());
 			if(c.getDrawObject().equals(DrawObjects.DrawObjectOne.toString())) {
 				DrawObjectOne.changeI();
-				Button1.setIcon(setIcon(DrawObjectOne.getI()));
+				try {
+					Button1.setIcon(setIcon(DrawObjectOne.getI()));
+				} catch (URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			c.changeDrawObjects(DrawObjects.DrawObjectOne.toString());
 		}
@@ -203,6 +228,9 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	class TextButtonEventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			c.changeDrawObjects(DrawObjects.DrawObjectText.toString());
+			GUI textG = new GUI();
+			textG.setVisible(true);
+			
 		}
 	}
 	
@@ -245,10 +273,18 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		
 		public void actionPerformed(ActionEvent e) {
 			color = JColorChooser.showDialog(null, "Цвет", null);
-			//ColorButton.setBackground(color);
 			c.setColor(color);
 		}
 	}
+	
+	class SizeChangeEventListener implements ChangeListener {
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			sizeDrawObject = ((JSlider) e.getSource()).getValue();
+		}
+	}
+	
 
 
 	@Override
@@ -271,23 +307,29 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 
 	@Override
 	public void nativeKeyTyped(NativeKeyEvent e) {
-		//if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL) System.out.println(isCtrl + " " + e.getKeyCode());
+		
 	}
 
 	public Color getColor() {
 		return color;
 	}
 	
-	public ImageIcon setIcon(String str) {
+	public ImageIcon setIcon(String str) throws URISyntaxException, IOException {
 		Image timg;
 		Image newimg;
 		if(str != "") {
-			imgico = new ImageIcon("img/" + str);
+			InputStream in = SecondGUI.class.getClassLoader().getResourceAsStream(str);
+			Image ico = ImageIO.read(in);
+			imgico = new ImageIcon(ico);
 	        timg = imgico.getImage() ;
 	        newimg = timg.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH ) ;
 	        imgico = new ImageIcon(newimg);
 		}
         return imgico;
+	}
+	
+	public static double getSizeDrawObject(){
+		return sizeDrawObject;
 	}
 
 }

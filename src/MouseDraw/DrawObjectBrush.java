@@ -1,7 +1,9 @@
 package MouseDraw;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 
 public class DrawObjectBrush extends DrawObject {
@@ -20,9 +22,9 @@ public class DrawObjectBrush extends DrawObject {
 	}
 	
 	public Graphics Draws(int x2, int y2, Color c) {
-		Graphics g = this.g;
+		Graphics2D g = (Graphics2D) this.g;
 		g.setColor(c);
-		g.fillOval(x2, y2, 10, 10);
+		g.fillOval(x2, y2, (int)super.getSizeDrawObject(), (int)super.getSizeDrawObject());
 		g.dispose();
 		return g;
 	}
