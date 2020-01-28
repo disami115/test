@@ -148,11 +148,7 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
         lastX = r.x;
         lastY = r.y;
         SecG.setNewImage(img);
-        //SecG.setExtendedState(JFrame.NORMAL);
-        //SecG.collapse();
         SecG.expand();
-       // SecG.setEnabled(true);
-		//SecG.setVisible(true);
 		this.setVisible(false);
 		isPressed = false;
 	}
@@ -212,7 +208,7 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
 			}
 			img = bf.getSubimage(lastX, lastY, HW[1], HW[0]);
 			SecG.setNewImage(img);
-			SecG.setVisible(true);
+			SecG.expand();
 			this.setVisible(false);
 		}
 	}

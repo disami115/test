@@ -94,6 +94,16 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		this.setVisible(true);
 		SizeSlider.setMajorTickSpacing(1);
 		SizeSlider.setPaintLabels(true);
+		LineButton.setToolTipText("Линия");
+		ArrowButton.setToolTipText("Стрелка");
+        ScreenButton.setToolTipText("Сделать скриншот");
+        BrushButton.setToolTipText("Кисть");
+        Button1.setToolTipText("Цифры");
+        TextButton.setToolTipText("Текст");
+        BlurButton.setToolTipText("Пикселизация");
+        SaveButton.setToolTipText("Сохранить");
+        SaveServButton.setToolTipText("Сохранить на сервер");
+        ColorButton.setToolTipText("Выбрать цвет");
 		LineButton.setIcon(setIcon("line.png"));
 		ArrowButton.setIcon(setIcon("arrow.png"));
         ScreenButton.setIcon(setIcon("screen.png"));
@@ -222,9 +232,10 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 
 	private void doUnvisible() throws InterruptedException
 	{
-		if(!isTray) g1.collapse();
-		TimeUnit.MILLISECONDS.sleep(150);
-		//g1.setExtendedState(JFrame.ICONIFIED);
+		if(!isTray) {
+			g1.collapse();
+			TimeUnit.MILLISECONDS.sleep(150);
+		}
 		this.setVisible(false);
 		this.remove(CanvPan);
 		
