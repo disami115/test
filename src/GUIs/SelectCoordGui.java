@@ -115,7 +115,6 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
 	    	g2d.drawImage(img, 0, 0, this);
 	        AlphaComposite composite = AlphaComposite.SrcOver.derive( 0.3f );
             g2d.setComposite( composite );
-            System.out.println("screenRect.x " + screenRect.x +" screenRect.y " + screenRect.y +" screenRect.width " + screenRect.width +" screenRect.height " + screenRect.height);
             g2d.fillRect(screenRect.x, screenRect.y, screenRect.width - screenRect.x, screenRect.height);
 	        g2d.dispose();
 	    }
@@ -145,12 +144,15 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
 		x2 = e.getX() ;
         y2 = e.getY() ;
         Screen.setXYWH(x1,x2,y1,y2);
-        System.out.println(r);
         if(isPressed) img = bf.getSubimage(r.x, r.y, r.width+1, r.height+1);
         lastX = r.x;
         lastY = r.y;
         SecG.setNewImage(img);
-		SecG.setVisible(true);
+        //SecG.setExtendedState(JFrame.NORMAL);
+        //SecG.collapse();
+        SecG.expand();
+       // SecG.setEnabled(true);
+		//SecG.setVisible(true);
 		this.setVisible(false);
 		isPressed = false;
 	}

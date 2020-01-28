@@ -55,7 +55,7 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	private TrayIcon icon = null;
 	private ImageIcon imgico = null;
 	private Color color;
-	private boolean isCtrl = false;
+	private boolean isCtrl = false, isTray = false;
 	
 	public SecondGUI(Image img) throws IOException, URISyntaxException {
 		super("ScreenSaver");
@@ -175,7 +175,8 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	    
 	}
 	
-	private void collapse() {
+	protected void collapse() {
+		isTray = true;
 		SecondGUI.this.setVisible(false);
         try {
             getSystemTray().add(icon);
@@ -200,6 +201,7 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	}
 	
 	public void expand() {
+		isTray = false;
 		SecondGUI.this.setVisible(true);
     	SecondGUI.this.setExtendedState(SecondGUI.NORMAL);
         getSystemTray().remove(icon);
@@ -213,15 +215,19 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		}
 		Screen.setXYWH(0, Screen.d.width, 0, Screen.d.height);
 		g2.setDefault(Screen.grabScreen(), this);
+		//g1.setExtendedState(JFrame.NORMAL);
 		g2.setVisible(true);
 	}
 	
 
 	private void doUnvisible() throws InterruptedException
 	{
-		this.remove(CanvPan);
+		if(!isTray) g1.collapse();
+		TimeUnit.MILLISECONDS.sleep(150);
+		//g1.setExtendedState(JFrame.ICONIFIED);
 		this.setVisible(false);
-		TimeUnit.SECONDS.sleep(1);
+		this.remove(CanvPan);
+		
 	}
 	
 	class ScreenButtonEventListener implements ActionListener {
@@ -331,7 +337,7 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		if(e.getKeyCode() == NativeKeyEvent.VC_Y && isCtrl) c.setNextGraphics((Graphics2D) c.getGraphics());
 		if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL) isCtrl = false;
 		if(e.getKeyCode() == NativeKeyEvent.VC_PRINTSCREEN) {
-			this.expand();
+			//g1.expand();
 			doScreen();
 		}
 	}
