@@ -73,9 +73,6 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		GlobalScreen.addNativeKeyListener(this);
 		URL url = getClass().getResource("screenshot.png");
 		InputStream in = SecondGUI.class.getClassLoader().getResourceAsStream("screenshot.png");
-		//System.out.println("hi " + in.toString());
-		//File fIco = new File(in.toString());
-		//System.out.println(fIco);
         Image ico = ImageIO.read(in);
         setIconImage(ico);
 		c = new MyCanvas(1.0, img);
@@ -84,10 +81,17 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		this.add(CanvPan, BorderLayout.CENTER);
 		if(g2 == null) g2 = new SelectCoordGui(img, this);
 		this.setBounds(Screen.d.width/2 - 400, Screen.d.height/2 - 300, 800, 600);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			
+            @Override
+            public void windowClosing(WindowEvent e) {
+            	collapse();
+            }
+
+        });
 		this.setLayout(new BorderLayout());
 		this.setVisible(true);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		SizeSlider.setMajorTickSpacing(1);
 		SizeSlider.setPaintLabels(true);
 		LineButton.setIcon(setIcon("line.png"));
@@ -126,8 +130,30 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		
 	    setJMenuBar(BP);
 	    
+	    ActionListener exitListener = new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	            System.out.println("Exiting...");
+	            System.exit(0);
+	        }
+	    };
+	    
+	    ActionListener expandListener = new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	        	g1.expand();
+	        }
+	    };
+	             
+	    
 	    if (SystemTray.isSupported()) {
-            icon = new TrayIcon(ico);
+	    	
+	    	PopupMenu popup = new PopupMenu();
+	 	    MenuItem exitItem = new MenuItem("Выход");
+	 	    exitItem.addActionListener(exitListener);
+	 	    MenuItem expandItem = new MenuItem("Развернуть");
+	 	    expandItem.addActionListener(expandListener);
+	 	    popup.add(expandItem);
+	 	    popup.add(exitItem);
+            icon = new TrayIcon(ico, "hello", popup);
             icon.setImageAutoSize(true);
             icon.setToolTip("ScreenSaver");
             icon.addActionListener(new ActionListener() {
@@ -141,16 +167,21 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 
                 @Override
                 public void windowIconified(WindowEvent e) {
-                	SecondGUI.this.setVisible(false);
-                    try {
-                        getSystemTray().add(icon);
-                    } catch (AWTException e1) {
-                        e1.printStackTrace();
-                    }
+                	collapse();
                 }
 
             });
 	    }
+	    
+	}
+	
+	private void collapse() {
+		SecondGUI.this.setVisible(false);
+        try {
+            getSystemTray().add(icon);
+        } catch (AWTException e1) {
+            e1.printStackTrace();
+        }
 	}
 	
 	public void setNewImage(Image img) {
