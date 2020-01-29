@@ -1,19 +1,19 @@
 package GUIs;
 
-
 import static java.awt.SystemTray.getSystemTray;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -22,8 +22,8 @@ import Screens.Screen;
 import Canvas.CanvasPanel;
 import Canvas.MyCanvas;
 import Canvas.MyCanvas.DrawObjects;
-import MouseDraw.DrawObject;
-import MouseDraw.DrawObjectLine;
+import Canvas.SystemColorChooserPanel;
+import MouseDraw.DrawObjectNumberRect;
 import MouseDraw.DrawObjectOne;
 
 import org.jnativehook.GlobalScreen;
@@ -43,7 +43,10 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	private JButton BlurButton = new JButton();
 	private JButton SaveServButton = new JButton();
 	private JButton ColorButton = new JButton();
+	private JButton RectangleButton = new JButton();
+	private JButton NumberRectButton = new JButton();
 	private JSlider SizeSlider = new JSlider(1, 10, 2);
+	private JMenu ColorMenu = new JMenu ();
 	private static double sizeDrawObject = 2.0;
 	public CanvasPanel CanvPan;
 	public SelectCoordGui g2 = null;
@@ -56,17 +59,24 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	private ImageIcon imgico = null;
 	private Color color;
 	private boolean isCtrl = false, isTray = false;
+	private boolean isPrtScr = false;
+	private boolean toggled = false;
+	private JMenuBar BP = new JMenuBar();
+	private JColorChooser colorChooser = new JColorChooser();
 	
 	public SecondGUI(Image img) throws IOException, URISyntaxException {
 		super("ScreenSaver");
-		try {
-			GlobalScreen.registerNativeHook();
-		}
-		catch (NativeHookException ex) {
-			//System.err.println("There was a problem registering the native hook.");
-			//System.err.println(ex.getMessage());
-
-			System.exit(1);
+		isPrtScr = false;
+		if(isPrtScr) {
+			try {
+				GlobalScreen.registerNativeHook();
+			}
+			catch (NativeHookException ex) {
+				//System.err.println("There was a problem registering the native hook.");
+				//System.err.println(ex.getMessage());
+	
+				System.exit(1);
+			}
 		}
 		color = Color.black;
 		g1 = this;
@@ -98,12 +108,15 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		ArrowButton.setToolTipText("Стрелка");
         ScreenButton.setToolTipText("Сделать скриншот");
         BrushButton.setToolTipText("Кисть");
-        Button1.setToolTipText("Цифры");
+        Button1.setToolTipText("Круг нумерованный");
         TextButton.setToolTipText("Текст");
         BlurButton.setToolTipText("Пикселизация");
         SaveButton.setToolTipText("Сохранить");
+        RectangleButton.setToolTipText("Прямоугольник");
+        NumberRectButton.setToolTipText("Прямоугольник нумерованный");
         SaveServButton.setToolTipText("Сохранить на сервер");
-        ColorButton.setToolTipText("Выбрать цвет");
+        ColorMenu.setToolTipText("Выбрать цвет");
+        
 		LineButton.setIcon(setIcon("line.png"));
 		ArrowButton.setIcon(setIcon("arrow.png"));
         ScreenButton.setIcon(setIcon("screen.png"));
@@ -113,7 +126,13 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
         BlurButton.setIcon(setIcon("blur.png"));
         SaveButton.setIcon(setIcon("save.png"));
         SaveServButton.setIcon(setIcon("server.png"));
-        ColorButton.setIcon(setIcon("color.png"));
+        ColorMenu.setIcon(setIcon("color.png"));
+        ColorMenu.setOpaque(true);
+        ColorMenu.setBackground(new Color(200, 218, 235));
+        ColorMenu.setMaximumSize(Button1.getMaximumSize());
+        ColorMenu.setBorder(ArrowButton.getBorder());
+        RectangleButton.setIcon(setIcon("rect.png"));
+        NumberRectButton.setIcon(setIcon(DrawObjectNumberRect.getI()));
 		ScreenButton.addActionListener(new ScreenButtonEventListener());
 		ArrowButton.addActionListener(new ArrowButtonEventListener());
 		Button1.addActionListener(new Button1EventListener());
@@ -123,21 +142,28 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 		SaveButton.addActionListener(new SaveButtonEventListener());
 		BrushButton.addActionListener(new BrushButtonEventListener());
 		SaveServButton.addActionListener(new SaveServButtonEventListener());
-		ColorButton.addActionListener(new ColorButtonEventListener());
+		//ColorMenu.addActionListener(new ColorButtonEventListener());
 		SizeSlider.addChangeListener(new SizeChangeEventListener());
-		JMenuBar BP = new JMenuBar();
+		RectangleButton.addActionListener(new RectangleButtonEventListener());
+		NumberRectButton.addActionListener(new NumberRectButtonEventListener());
+		createColorChooser();
+		//GridBagConstraints constraints = new GridBagConstraints(); 
+	   // constraints.ipadx = 100;
+	   // constraints.ipady = 100;
+		ColorMenu.add(colorChooser);
 		BP.add(ScreenButton);
 		BP.add(BrushButton);
 		BP.add(LineButton);
 		BP.add(ArrowButton);
+		BP.add(RectangleButton);
 		BP.add(Button1);
+		BP.add(NumberRectButton);
 		BP.add(TextButton);
 		BP.add(BlurButton);
-		BP.add(ColorButton);
+		BP.add(ColorMenu);
 		BP.add(SaveButton);
 		BP.add(SaveServButton);
 		BP.add(SizeSlider);
-		
 	    setJMenuBar(BP);
 	    
 	    ActionListener exitListener = new ActionListener() {
@@ -256,8 +282,7 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 	
 	class Button1EventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			System.out.println(c.getDrawObject() + " " + DrawObjects.DrawObjectOne.toString());
-			if(c.getDrawObject().equals(DrawObjects.DrawObjectOne.toString())) {
+			//if(c.getDrawObject().equals(DrawObjects.DrawObjectOne.toString())) {}
 				DrawObjectOne.changeI();
 				try {
 					Button1.setIcon(setIcon(DrawObjectOne.getI()));
@@ -268,8 +293,24 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			}
+			
 			c.changeDrawObjects(DrawObjects.DrawObjectOne.toString());
+		}
+	}
+
+	class NumberRectButtonEventListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			DrawObjectNumberRect.changeI();
+			try {
+				NumberRectButton.setIcon(setIcon(DrawObjectNumberRect.getI()));
+			} catch (URISyntaxException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			c.changeDrawObjects(DrawObjects.DrawObjectNumberRect.toString());
 		}
 	}
 
@@ -300,6 +341,12 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 			c.changeDrawObjects(DrawObjects.DrawObjectLine.toString());
 		}
 	}
+	
+	class RectangleButtonEventListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			c.changeDrawObjects(DrawObjects.DrawObjectRect.toString());
+		}
+	}
 
 	class SaveServButtonEventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -319,10 +366,45 @@ public class SecondGUI extends JFrame implements NativeKeyListener{
 
 	class ColorButtonEventListener implements ActionListener {
 		
+		
 		public void actionPerformed(ActionEvent e) {
-			color = JColorChooser.showDialog(null, "Цвет", null);
+			
+			//JPopupMenu popup = new JPopupMenu();
+			
+			
+		    //JDialog d = colorChooser.createDialog(null,"Выбор цвета",true,colorChooser,null,null);
+		    //item.add(colorChooser);
+		    //popup.add(d);
+			
+		    //colorChooser.showDialog(colorChooser, "", color);
+			//d.setVisible(true);
+		    //popup.show(c, ColorButton.getX(), ColorButton.getY());
+			
+			
+			
 			c.setColor(color);
+			
 		}
+	}
+	
+	protected void createColorChooser() {
+		AbstractColorChooserPanel[] oldPanels = colorChooser.getChooserPanels();
+		//JMenuItem item = new JMenuItem("Cut");
+
+		//item.addActionListener(listener);
+		
+		
+	    for (int i = 0; i < oldPanels.length; i++) {
+	      String clsName = oldPanels[i].getClass().getName();
+	      System.out.println(i + " " + clsName);
+	      if (clsName.equals("javax.swing.colorchooser.ColorChooserPanel") || clsName.equals("javax.swing.colorchooser.DefaultSwatchChooserPanel")) {
+	    	  colorChooser.removeChooserPanel(oldPanels[i]);
+	      }
+	    }
+	    colorChooser.addChooserPanel(new SystemColorChooserPanel());
+        colorChooser.setBounds(ColorButton.getX(), ColorButton.getY()-100, 100, 50);
+        colorChooser.setPreviewPanel(new JPanel());
+        colorChooser.setVisible(true);
 	}
 	
 	class SizeChangeEventListener implements ChangeListener {

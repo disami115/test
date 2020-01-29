@@ -44,8 +44,6 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
 	public SelectCoordGui(Image img, SecondGUI SecG) {
 		setDefault(img, SecG);
 		addKeyListener(this);
-		//setFocusableWindowState(true);
-		//setFocusable(true);
 		setUndecorated(true);
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -55,8 +53,6 @@ public class SelectCoordGui extends JFrame implements MouseListener, MouseMotion
 			screenRect = screenRect.union(gd.getDefaultConfiguration().getBounds());
 			
 		}
-		//screenRect.setBounds((int)(screenRect.getX() - screenRect.getX()), (int)screenRect.getY(), screenRect.width, screenRect.height);
-		//screenRect.setBounds(0, 0, screenRect.width, screenRect.height);
 		d.setSize(screenRect.width, screenRect.height);
 		System.out.println("x = " + screenRect.getBounds());
 	    this.setBounds(screenRect.x, screenRect.y, d.width, d.height);

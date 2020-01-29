@@ -49,7 +49,7 @@ public class DrawObjectBlur extends DrawObject {
 	}
 	
 	private BufferedImage doBlur() {
-		final int PIX_SIZE = 1+(int)super.getSizeDrawObject();
+		final int PIX_SIZE = 6;
 	    BufferedImage origin = new BufferedImage(MyCanvas.bufferedImage.getWidth(null), MyCanvas.bufferedImage.getHeight(null), BufferedImage.TYPE_INT_RGB);
 	    try {
 			ImageIO.write(MyCanvas.bufferedImage, "png", new File("temp.png"));

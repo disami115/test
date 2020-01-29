@@ -13,7 +13,7 @@ private DrawObjectBrush p = null;
 
 	public DrawBrushLine(Graphics g, MouseEvent e) {
 		super(g, e);
-		p =  new DrawObjectBrush(g, e);
+		//p =  new DrawObjectBrush(g, e);
 		// TODO Auto-generated constructor stub
 	}
 
